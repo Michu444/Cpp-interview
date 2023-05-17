@@ -23,21 +23,24 @@ int main()
     char option;
     World *world = nullptr;
 
+    // MAIN MENU LOOP
     do
     {
-        option = World::displayMenu();
+//        option = World::displayMenu(); //TODO UNCOMMENT
+        option = 'N';
 
         if (option == 'N')
         {
             world = new World(12, 12);
+            world->createMap();
 
-            //        world.createMap();
-
-            //        world.displayMap();
+            //        world->displayMap();
 
         } else if (option == 'L')
         {
             SettingsReader settingsReader;
+
+            world = new World(12,12); // TODO
 
             char **map = settingsReader.readMap();
 
@@ -60,15 +63,14 @@ int main()
             throw runtime_error("PROGRAM CRASHED! PLEASE RUN GAME AGAIN");
         }
     } while (option != 'N' && option != 'L');
-/*
- * MAIN PROGRAM LOOP
- */
+
+    // MAIN GAME LOOP
     do
     {
         world->makeRound();
+        getch();
 
-
-    } while (!world->getGameEnd());
+    } while (!world->getGameStatus());
 
     system("cls");
     cout << "---THANK YOU FOR GAME!---" << "\n";

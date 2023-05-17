@@ -1,6 +1,6 @@
 #ifndef INTERVIEW_WORLD_H
 #define INTERVIEW_WORLD_H
-#include "Instance.h"
+#include "utils/HeadersConnector.h"
 
 
 using namespace std;
@@ -31,7 +31,7 @@ public:
 
     void createMap();
 
-    bool getGameEnd();
+    bool getGameStatus();
 
     Instance *getField(int x, int y);
 
@@ -44,6 +44,11 @@ public:
     void removeCharacter();
 
     void makeRound();
+
+    void setInstance(Instance *instance, int pos_x, int pos_y);
+
+    void handleBuilding(Building *building);
+    void handleCharacter(Character *character);
 
     static char displayMenu();
 

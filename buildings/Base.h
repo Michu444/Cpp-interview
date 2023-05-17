@@ -1,6 +1,5 @@
 #ifndef INTERVIEW_BASE_H
 #define INTERVIEW_BASE_H
-
 #include "Building.h"
 
 class Base : public Building

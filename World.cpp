@@ -2,9 +2,7 @@
 #include <conio.h>
 #include <windows.h>
 #include "World.h"
-#include "utils/SettingsReader.h"
-#include "Instance.h"
-#include "buildings/Base.h"
+
 
 /*
  * Constructors & Destructors
@@ -18,6 +16,8 @@ World::World(int map_size_x, int map_size_y)
     round = 0;
     numberOrganisms = 0;
     gameEnd = false;
+
+    playersTurn = 1;
 
 }
 
@@ -47,6 +47,8 @@ void World::createCharacter()
 
 void World::makeRound()
 {
+    system("cls");
+
     if (round == 2000)
     {
         cout << "END GAME!\n";
@@ -56,16 +58,62 @@ void World::makeRound()
     }
 
     this->increaseRound();
-    cout << "Round: " << this->getRound() << "\n";
+    cout << "Round: " << this->getRound() << "\n\n";
 
 
+    for (int y = 0; y < this->map_size_x; ++y)
+    {
+        for (int x = 0; x < this->map_size_y; ++x)
+        {
+            if (auto *building = dynamic_cast<Building*>(map[x][y]))
+            {
+                this->handleBuilding(building);
 
+                cout << "FOUND BASE OBJECT!\n";
 
+            }else if (auto *character = dynamic_cast<Character*>(map[x][y]))
+            {
+                cout << "FOUND CHARACTER OBJECT!\n";
+                this->handleCharacter(character);
 
-    // po kolei ma obslugiwac wszystkie pola na planszy i jesli jest na nim obiekt to wykonywad dla opcje: ruch albo akcja.
-
-
+            }else if (map[x][y] == nullptr)
+            {
+                continue;
+            }
+            else
+            {
+                throw logic_error("UNRECOGNIZED OBJECT ON THE MAP!");
+            }
+        }
+    }
 }
+
+void World::handleCharacter(Character *character)
+{
+    if (Knight *knight = dynamic_cast<Knight*>(character))
+    {
+        /// TODO handle Character object - move, action and other
+    }
+}
+
+void World::handleBuilding(Building *building)
+{
+    if (Base *base = dynamic_cast<Base*>(building))
+    {
+        // TODO handle base object - create_object where choose is possible if players has gold
+    }else
+    {
+        return;
+    }
+}
+
+
+void World::setInstance(Instance *instance, int pos_x, int pos_y)
+{
+    this->map[pos_x][pos_y] = instance;
+}
+
+
 
 
 /*
@@ -82,7 +130,7 @@ int World::getRound()
     return this->round;
 }
 
-bool World::getGameEnd()
+bool World::getGameStatus()
 {
     return this->gameEnd;
 }
@@ -104,9 +152,9 @@ void World::createMap() // remember to delete all map objects
 
     this->map = new Instance **[this->map_size_x];
 
-    for (int i = 0; i < this->map_size_x; i++)
+    for (int x = 0; x < this->map_size_x; x++)
     {
-        this->map[i] = new Instance * [this->map_size_y];
+        this->map[x] = new Instance * [this->map_size_y];
     }
 
     for (int x = 0; x < map_size_x; x++)

@@ -1,5 +1,5 @@
-#ifndef INTERVIEW_BUILDING_H
-#define INTERVIEW_BUILDING_H
+#ifndef INTERVIEW_CHARACTER_H
+#define INTERVIEW_CHARACTER_H
 #include "../Instance.h"
 
 class Character :public Instance
