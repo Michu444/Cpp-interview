@@ -10,7 +10,6 @@ protected:
     int buildingCounter{};
     char symbol{};
 
-
 public:
     Character(World* world, int hitPoints, int speed, int cost, int attack_range, int building_time, int posX, int posY);
 

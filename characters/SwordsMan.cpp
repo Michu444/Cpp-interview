@@ -6,6 +6,8 @@ SwordsMan::SwordsMan(World* world, int posX, int posY)
     this->buildingCounter = 5;
     this->movePossible = false;
     this->symbol = 'S';
+    name = "SwordsMan";
+
 
 }
 
@@ -15,8 +17,7 @@ SwordsMan::SwordsMan(World* world, int hitPoints, int posX, int posY, int buildi
     this->buildingCounter = buildingCounter;
     this->movePossible = true;
     this->symbol = 'S';
-
-
+    name = "SwordsMan";
 }
 
 void SwordsMan::action()

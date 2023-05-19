@@ -18,9 +18,9 @@ World::World(int mapSizeX, int mapSizeY)
 
     this->createMap();
 
-    Base *player_1 = new Base(this, 0, 0, '1');
+    player_1 = new Base(this, 0, 0, '1');
 
-    Base *player_2 = new Base(this, 11, 11, '2');
+    player_2 = new Base(this, 11, 11, '2');
 
     this->setInstanceOnMap(player_1, 0, 0);
 
@@ -51,17 +51,16 @@ World::~World()
 void World::makeRound()
 {
     system("cls");
+    this->displayMap();
 
-    if (round == 2000) // TODO maybe add var if gameEnd == true do this too..
+    if (round >= 2000 || player_1->getHitPoints() <= 0 && player_2->getHitPoints() <= 0) // TODO maybe add var if gameEnd == true do this too..
     {
-        cout << "END GAME!\n";
-        // this->endGame();
+        this->endGame();
         gameEnd = true;
-        return;
     }
 
     this->increaseRound();
-    cout << "Round: " << this->getRound() << "\n\n";
+    std::cout << "\nRound: " << this->getRound() << "\n\n";
 
 
     for (int y = 0; y < this->mapSizeX; ++y)
@@ -72,12 +71,10 @@ void World::makeRound()
             {
                 this->handleBuilding(building);
 
-                cout << "FOUND BASE OBJECT!\n";
-
             }else if (auto *character = dynamic_cast<Character*>(map[x][y]))
             {
-                cout << "FOUND CHARACTER OBJECT!\n";
-                this->handleCharacter(character);
+//                this->handleCharacter(character);
+                continue;
 
             }else if (map[x][y] == nullptr)
             {
@@ -85,7 +82,46 @@ void World::makeRound()
             }
             else
             {
-                throw logic_error("UNRECOGNIZED OBJECT ON THE MAP!");
+                throw std::logic_error("UNRECOGNIZED OBJECT ON THE MAP!");
+            }
+        }
+    }
+
+    std::cout << "\nEND OF THE " << this->getRound() << " ROUND! PRESS ENTER TO GO TO NEXT ROUND!\n";
+}
+
+
+/*
+ * Handle character instances in single round.
+ *
+ * @param character: Character object to handle.
+ */
+void World::handleCharacter(Character *character)
+{
+    while(true)
+    {
+        int choose;
+        std::cout << "Character turn: " << character->getName() << " at position: (" << character->getPosX() << ", " << character->getPosY() << ")\n";
+        std::cout << "[1] Move character" << "\n";
+        std::cout << "[2] Make action!" << "\n";
+        std::cout << "What you want to do: ";
+        std::cin >> choose;
+
+        switch(choose)
+        {
+            case 1:
+            {
+               character->move();
+               return;
+            }
+            case 2:
+            {
+                character->action();
+                return;
+            }
+            default:
+            {
+                std::cout << "Wrong option! Try again." << "\n";
             }
         }
     }
@@ -93,12 +129,27 @@ void World::makeRound()
 
 
 /*
- * Creating instance read from file. Checking if it is possible to place on the map. If unit exist on map field, unit
+ * Handle building instances in single round.
+ *
+ * @param building: Object to handle.
+ */
+void World::handleBuilding(Building *building)
+{
+    if (building->getName() == "Base")
+    {
+        std::cout << "\nBase turn" << " at position: (" << building->getPosX() << ", " << building->getPosY() << ")\n";
+    }
+    building->action();
+}
+
+
+/*
+ * Place instance read from file. Checking if it is possible to place on the map. If unit exist on map field, unit
  * will not be placed.
  *
  * @param instance: Object which we need to place on map.
  */
-void World::createExistingCharacter(Instance* instance)
+void World::placeExistingCharacter(Instance* instance)
 {
     if (numberOrganisms < maxMapSize && this->checkMapField(instance->getPosX(), instance->getPosY()))
     {
@@ -121,10 +172,10 @@ void World::createCharacterInBase(Base *base)
     {
         while(true)
         {
-            cout << "[1] Knight" << "\n";
-            cout << "[2] Cancel" << "\n";
-            cout << "Which character do you want to create: ";
-            cin >> option;
+            std::cout << "[1] Knight" << "\n";
+            std::cout << "[2] Cancel" << "\n";
+            std::cout << "Which character do you want to create: ";
+            std::cin >> option;
 
             if (option == 1 && base->getGold() >= 400 )
             {
@@ -138,13 +189,13 @@ void World::createCharacterInBase(Base *base)
             }
             else
             {
-                cout << "Wrong option or you don't have enough gold! Try again.";
+                std::cout << "Wrong option or you don't have enough gold! Try again.";
             }
         }
     }
     else
     {
-        cout << "Map is full, you cant create new Object in base!" << "\n";
+        std::cout << "Map is full, you cant create new Object in base!" << "\n";
     }
 }
 
@@ -179,41 +230,6 @@ void World::setBaseDuringCrafting(Base* base, Instance *character, bool status, 
     base->setCharacterInProgress(character);
     base->setUnitInProgress(status);
     base->setGold(base->getGold()- goldToSub);
-}
-
-
-/*
- * Handle character instances in single round.
- *
- * @param character: Object to handle.
- */
-void World::handleCharacter(Character *character)
-{
-    if (Knight *knight = dynamic_cast<Knight*>(character))
-    {
-        // TODO ...
-    }
-    else
-    {
-        return;
-    }
-}
-
-
-/*
- * Handle building instances in single round.
- *
- * @param building: Object to handle.
- */
-void World::handleBuilding(Building *building)
-{
-    if (Base *base = dynamic_cast<Base*>(building))
-    {
-        base->action();
-    }else
-    {
-        return;
-    }
 }
 
 
@@ -279,6 +295,31 @@ void World::increaseRound()
     this->round++;
 }
 
+/*
+ * Summarize game and make operations during ending game.
+ */
+void World::endGame()
+{
+    Base *winner;
+
+    if (player_1->getHitPoints() > player_2->getHitPoints())
+    {
+        winner = player_1;
+    }
+    else
+    {
+        winner = player_2;
+    }
+
+    system("cls"); // TODO CHANGE IT
+
+    std::cout << "----- GAME END! -----" << "\n";
+    std::cout << "-----  WINNER   -----" << "\n";
+    std::cout << "----- PLAYER " << winner->getSymbol() << "!! ----" << "\n";
+    std::cout << "  CONGRATULATIONS!!! " << "\n";
+    getch();
+}
+
 
 /*
  * Creating empty map at the beginning of the game.
@@ -313,45 +354,45 @@ void World::displayMap()
     {
         if (i == 0)
         {
-            cout << "     " << i;
+            std::cout << "     " << i;
         }
         else if (i < 10)
         {
-            cout << "    " << i;
+            std::cout << "    " << i;
         }
         else
         {
-            cout << "   " << i;
+            std::cout << "   " << i;
         }
     }
 
-    cout << "\n";
+    std::cout << "\n";
 
     // display rows
     for (int y = 0; y < mapSizeY; y++)
     {
         if (y < 10)
         {
-            cout << y << "  ";
+            std::cout << y << "  ";
         }
         else
         {
-            cout << y << " ";
+            std::cout << y << " ";
         }
 
         for (int x = 0; x < mapSizeX; x++)
         {
             if (getField(x, y) == nullptr)
             {
-                cout << "  0  ";
+                std::cout << "  0  ";
             }
             else
             {
-                cout << "  " << getField(x,y)->getSymbol() << "  ";
+                std::cout << "  " << getField(x,y)->getSymbol() << "  ";
             }
         }
 
-        cout << endl;
+        std::cout << "\n";
     }
 }
 
@@ -368,13 +409,13 @@ char World::displayMenu()
 //        system("clear"); // TODO CHANGE TO WORK ON LINUX
          system("cls");
 
-        cout << "----- MAIN MENU -----" << "\n";
-        cout << " N - Create new game " << "\n";
-        cout << " L - Load game       " << "\n";
-        cout << " I - Game info       " << "\n";
-        cout << " Q - Quit game       " << "\n";
+        std::cout << "----- MAIN MENU -----" << "\n";
+        std::cout << " N - Create new game " << "\n";
+        std::cout << " L - Load game       " << "\n";
+        std::cout << " I - Game info       " << "\n";
+        std::cout << " Q - Quit game       " << "\n";
 
-        cout << "\nChoose option: ";
+        std::cout << "\nChoose option: ";
 
         option = getch();
         option = toupper(option);
@@ -382,7 +423,7 @@ char World::displayMenu()
         if (option != 'N' && option != 'L' && option != 'Q' && option != 'I')
         {
             system("cls");
-            cout << "\nInvalid option. Please try again.";
+            std::cout << "\nInvalid option. Please try again.";
             Sleep(1000);
         }
 
@@ -399,16 +440,16 @@ void World::displayGameInfo()
 {
     system("cls");
 
-    cout << "------ WAR GAME! ------" << "\n";
-    cout << "-----------------------" << "\n\n";
-    cout << "----- DESCRIPTION -----" << "\n";
-    cout << "This game was created for interview. I was very excited during writing all this code. Thanks you for the ";
-    cout << "opportunity to participate in recruitment process and I am sorry that I did not manage to finish the whole game ";
-    cout << "but i will do it for myself. Unfortunately I did not have enough time to create this game with GUI too.";
-    cout << "\n\n";
-    cout << "------- AUTHOR --------" << "\n";
-    cout << "    MICHAL DUDZIAK     " << "\n\n\n";
+    std::cout << "------ WAR GAME! ------" << "\n";
+    std::cout << "-----------------------" << "\n\n";
+    std::cout << "----- DESCRIPTION -----" << "\n";
+    std::cout << "This game was created for interview. I was very excited during writing all this code. Thanks you for the ";
+    std::cout << "opportunity to participate in recruitment process and I am sorry that I did not manage to finish the whole game ";
+    std::cout << "but i will do it for myself. Unfortunately I did not have enough time to create this game with GUI too.";
+    std::cout << "\n\n";
+    std::cout << "------- AUTHOR --------" << "\n";
+    std::cout << "    MICHAL DUDZIAK     " << "\n\n\n";
 
-    cout << "Press enter to exit info: ";
+    std::cout << "Press enter to exit info: ";
     getch();
 }

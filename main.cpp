@@ -3,18 +3,16 @@
 #include <iostream>
 #include <conio.h>
 
-using namespace std;
-
 #define ENTER 13
 #define Q 113
 #define N 110
 
 void display_menu()
 {
-    cout << "----- MAIN MENU -----" << "\n";
-    cout << " N - Create new game " << "\n";
-    cout << " L - Load game       " << "\n";
-    cout << " Q - Quit game       " << "\n";
+    std::cout << "----- MAIN MENU -----" << "\n";
+    std::cout << " N - Create new game " << "\n";
+    std::cout << " L - Load game       " << "\n";
+    std::cout << " Q - Quit game       " << "\n";
 
 }
 
@@ -33,7 +31,6 @@ int main()
         {
             world = new World(12, 12);
 
-            world->displayMap();
 
         } else if (option == 'L')
         {
@@ -43,7 +40,7 @@ int main()
 
             char **map = settingsReader.readMap();
 
-            cout << map;
+            std::cout << map;
 
             // TODO second constructor to prepare world with setted settings where settings are converted to correct data.
             // World world(map, orders, status); <-- inside all should be converted to correct vaules.
@@ -51,7 +48,7 @@ int main()
         } else if (option == 'Q')
         {
             system("cls");
-            cout << "GOOD BYE!";
+            std::cout << "GOOD BYE!";
             getch();
             exit(0);
         } else if (option == 'I')
@@ -59,7 +56,7 @@ int main()
             World::displayGameInfo();
         } else
         {
-            throw runtime_error("PROGRAM CRASHED! PLEASE RUN GAME AGAIN");
+            throw std::runtime_error("PROGRAM CRASHED! PLEASE RUN GAME AGAIN");
         }
     } while (option != 'N' && option != 'L');
 
@@ -72,7 +69,7 @@ int main()
     } while (!world->getGameStatus());
 
     system("cls");
-    cout << "---THANK YOU FOR GAME!---" << "\n";
+    std::cout << "---THANK YOU FOR GAME!---" << "\n";
     getchar();
 
     return 0;

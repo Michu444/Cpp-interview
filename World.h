@@ -3,8 +3,6 @@
 #include "utils/HeadersConnector.h"
 
 
-using namespace std;
-
 /*
  * The World class contains all the mechanics of operating the game.
  */
@@ -21,6 +19,8 @@ protected:
     Instance ***map{};
     int mapSizeX, mapSizeY;
     int maxMapSize = mapSizeX * mapSizeY;
+
+    Base *player_1, *player_2;
 
 
 
@@ -41,7 +41,7 @@ public:
 
     void increaseRound();
 
-    void createExistingCharacter(Instance* instance);
+    void placeExistingCharacter(Instance* instance);
 
     void createCharacterInBase(Base *base);
 
@@ -57,6 +57,8 @@ public:
 
     void handleBuilding(Building *building);
     void handleCharacter(Character *character);
+
+    void endGame();
 
     static char displayMenu();
 

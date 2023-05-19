@@ -4,8 +4,9 @@ Knight::Knight(World* world, int posX, int posY)
         :Character(world, 70, 5, 400, 1, 5, posX, posY)
 {
     this->buildingCounter = 5;
-    this->symbol = 'K';
     this->movePossible = false;
+    this->symbol = 'K';
+    name = "Knight";
 }
 
 Knight::Knight(World* world, int hitPoints, int posX, int posY, int buildingCounter)
@@ -14,7 +15,7 @@ Knight::Knight(World* world, int hitPoints, int posX, int posY, int buildingCoun
     this->buildingCounter = buildingCounter;
     this->movePossible = true;
     this->symbol = 'K';
-
+    name = "Knight";
 }
 
 void Knight::action()

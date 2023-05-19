@@ -12,6 +12,16 @@ Instance::Instance(World * world, int hitPoints, int speed, int cost, int attack
     this->posY = posY;
 }
 
+std::string Instance::getName()
+{
+    return this->name;
+}
+
+int Instance::getHitPoints()
+{
+    return this->hitPoints;
+}
+
 Instance::~Instance()
 = default;
 

@@ -6,6 +6,7 @@ class Base : public Building
 {
 protected:
     char symbol;
+
     int gold;
     World *world;
 

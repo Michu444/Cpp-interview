@@ -7,6 +7,7 @@ Base::Base(World* world, int posX, int posY, char symbol)
     this->symbol = symbol;
     this->world = world;
     this->gold = 2000;
+    name = "Base";
 }
 
 void Base::action()
@@ -36,6 +37,7 @@ void Base::action()
                 if (!unitInProgress)
                 {
                     this->world->createCharacterInBase(this);
+                    return;
                 }
                 else
                 {

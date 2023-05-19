@@ -1,6 +1,7 @@
 #ifndef INTERVIEW_INSTANCE_H
 #define INTERVIEW_INSTANCE_H
 #include <iostream>
+#include <string>
 
 class World;
 
@@ -14,6 +15,8 @@ protected:
     int cost;
     int attack_range;
     int building_time;
+    std::string name;
+
 
 
 public:
@@ -29,6 +32,10 @@ public:
     virtual int getPosX() = 0;
 
     virtual int getPosY() = 0;
+
+    virtual int getHitPoints();
+
+    virtual std::string getName();
 
     virtual ~Instance();
 };
