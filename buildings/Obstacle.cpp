@@ -1,7 +1,7 @@
 #include "Obstacle.h"
 
-Obstacle::Obstacle(World* world, int pos_x, int pos_y)
-        : Building(world, 0, 0, 0, 0, 0, pos_x, pos_y)
+Obstacle::Obstacle(World* world, int posX, int posY)
+        : Building(world, 0, 0, 0, 0, 0, posX, posY)
 {}
 
 void Obstacle::action()

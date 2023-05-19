@@ -22,8 +22,6 @@ protected:
     int mapSizeX, mapSizeY;
     int maxMapSize = mapSizeX * mapSizeY;
 
-    int playersTurn;
-
 
 
 public:
@@ -53,7 +51,7 @@ public:
 
     void makeRound();
 
-    void setInstanceOnMap(Instance *instance, int pos_x, int pos_y);
+    void setInstanceOnMap(Instance *instance, int posX, int posY);
 
     bool checkMapField(int posX, int posY);
 

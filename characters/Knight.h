@@ -6,9 +6,9 @@ class Knight : public Character
 {
 public:
 
-    Knight(World* world, int pos_x, int pos_y); // creating factory new object
+    Knight(World* world, int posX, int posY); // creating factory new object
 
-    Knight(World* world, int hitPoints, int pos_x, int pos_y, int buildingCounter); // creating Knight probably read from file
+    Knight(World* world, int hitPoints, int posX, int posY, int buildingCounter); // creating Knight probably read from file
 
     void action() override;
 

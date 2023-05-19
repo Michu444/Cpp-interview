@@ -8,7 +8,7 @@ class Instance
 {
 protected:
     World *world;
-    int pos_x, pos_y;
+    int posX, posY;
     int hitPoints;
     int speed;
     int cost;
@@ -18,7 +18,7 @@ protected:
 
 public:
 
-    Instance(World *world, int hitPoints, int speed, int cost, int attack_range, int building_time, int pos_x, int pos_y);
+    Instance(World *world, int hitPoints, int speed, int cost, int attack_range, int building_time, int posX, int posY);
 
     virtual void action() = 0;
 

@@ -1,7 +1,7 @@
 #include "Character.h"
 
-Character::Character(World* world, int hitPoints, int speed, int cost, int attack_range, int building_time, int pos_x, int pos_y)
-:Instance(world, hitPoints, speed, cost, attack_range, building_time, pos_x, pos_y)
+Character::Character(World* world, int hitPoints, int speed, int cost, int attack_range, int building_time, int posX, int posY)
+:Instance(world, hitPoints, speed, cost, attack_range, building_time, posX, posY)
 {}
 
 void Character::action()
@@ -17,12 +17,12 @@ char Character::getSymbol()
 
 int Character::getPosX()
 {
-    return this->pos_x;
+    return this->posX;
 }
 
 int Character::getPosY()
 {
-    return this->pos_y;
+    return this->posY;
 }
 
 

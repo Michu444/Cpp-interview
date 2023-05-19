@@ -7,7 +7,7 @@ class GoldMine : public Building
     bool occupied;
 
 public:
-    GoldMine(World* world, int pos_x, int pos_y);
+    GoldMine(World* world, int posX, int posY);
 
     void action() override;
 

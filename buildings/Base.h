@@ -13,7 +13,7 @@ protected:
     bool unitInProgress;
 
 public:
-    Base(World* world, int pos_x, int pos_y, char symbol);
+    Base(World* world, int posX, int posY, char symbol);
 
     void action() override;
 

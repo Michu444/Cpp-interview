@@ -1,8 +1,8 @@
 #include "Base.h"
 #include "../World.h"
 
-Base::Base(World* world, int pos_x, int pos_y, char symbol)
-: Building(world, 200, 0, 0, 0, 0, pos_x, pos_y)
+Base::Base(World* world, int posX, int posY, char symbol)
+: Building(world, 200, 0, 0, 0, 0, posX, posY)
 {
     this->symbol = symbol;
     this->world = world;

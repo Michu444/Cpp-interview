@@ -6,7 +6,7 @@ class Obstacle :public Building
 {
 
 public:
-    Obstacle(World* world, int pos_x, int pos_y);
+    Obstacle(World* world, int posX, int posY);
 
     void action() override;
 
