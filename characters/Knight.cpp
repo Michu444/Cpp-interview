@@ -13,6 +13,7 @@ Knight::Knight(World* world, int hitPoints, int pos_x, int pos_y, int buildingCo
 {
     this->buildingCounter = buildingCounter;
     this->movePossible = true;
+    this->symbol = 'K';
 
 }
 

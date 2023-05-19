@@ -4,8 +4,6 @@
 
 class SwordsMan : public Character
 {
-protected:
-
 public:
 
     SwordsMan(World* world, int pos_x, int pos_y); // creating factory new object

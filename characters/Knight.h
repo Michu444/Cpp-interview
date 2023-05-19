@@ -4,8 +4,6 @@
 
 class Knight : public Character
 {
-protected:
-
 public:
 
     Knight(World* world, int pos_x, int pos_y); // creating factory new object
