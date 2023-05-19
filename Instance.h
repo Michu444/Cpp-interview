@@ -1,5 +1,6 @@
 #ifndef INTERVIEW_INSTANCE_H
 #define INTERVIEW_INSTANCE_H
+#include <iostream>
 
 class World;
 
@@ -13,7 +14,6 @@ protected:
     int cost;
     int attack_range;
     int building_time;
-    char symbol;
 
 
 public:
@@ -24,8 +24,13 @@ public:
 
     virtual void move() = 0;
 
+    virtual char getSymbol() = 0;
 
+    virtual int getPosX() = 0;
 
+    virtual int getPosY() = 0;
+
+    virtual ~Instance();
 };
 
 #endif

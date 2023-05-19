@@ -4,6 +4,12 @@
 
 class Character :public Instance
 {
+protected:
+
+    bool movePossible{};
+    int buildingCounter{};
+    char symbol{};
+
 
 public:
     Character(World* world, int hitPoints, int speed, int cost, int attack_range, int building_time, int pos_x, int pos_y);
@@ -11,6 +17,12 @@ public:
     void action() override;
 
     void move() override;
+
+    char getSymbol() override;
+
+    int getPosX() override;
+    int getPosY() override;
+
 };
 
 #endif

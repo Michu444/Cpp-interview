@@ -4,12 +4,33 @@
 
 class Base : public Building
 {
+protected:
+    char symbol;
+    int gold;
+    World *world;
+
+    Instance *characterInProgress;
+    bool unitInProgress;
+
 public:
-    Base(World* world, int hitPoints, int speed, int cost, int attack_range, int building_time, int pos_x, int pos_y);
+    Base(World* world, int pos_x, int pos_y, char symbol);
 
     void action() override;
 
-    void move() override;
+    char getSymbol() override;
+
+    int getGold();
+
+    void setGold(int goldToSet);
+
+    Instance *getCharacterInProgress();
+
+    void setCharacterInProgress(Instance *character);
+
+    bool getUnitInProgress();
+
+    void setUnitInProgress(bool status);
+
 };
 
 #endif

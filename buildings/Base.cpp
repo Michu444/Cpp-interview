@@ -1,17 +1,93 @@
 #include "Base.h"
+#include "../World.h"
 
-Base::Base(World* world, int hitPoints, int speed, int cost, int attack_range, int building_time, int pos_x, int pos_y)
-        : Building(world, hitPoints, speed, cost, attack_range, building_time, pos_x, pos_y)
+Base::Base(World* world, int pos_x, int pos_y, char symbol)
+: Building(world, 200, 0, 0, 0, 0, pos_x, pos_y)
 {
-
+    this->symbol = symbol;
+    this->world = world;
+    this->gold = 2000;
 }
 
 void Base::action()
 {
-    // Implementacja akcji dla klasy Base
+    int choose;
+
+    while (true)
+    {
+        std::cout << "[1] Skip this round" << "\n";
+
+        if (!unitInProgress)
+        {
+            std::cout << "[2] Create new character" << "\n";
+        }
+
+        std::cout << "What you want do to: ";
+        std::cin >> choose;
+
+        switch (choose)
+        {
+            case 1:
+            {
+                return;
+            }
+            case 2:
+            {
+                if (!unitInProgress)
+                {
+                    this->world->createCharacterInBase(this);
+                }
+                else
+                {
+                    std::cout << "\nInvalid option. Please choose again.\n\n";
+                }
+
+            }
+            default:
+            {
+                std::cout << "\nInvalid option. Please choose again.\n\n";
+            }
+        }
+    }
+
+
+
 }
 
-void Base::move()
+char Base::getSymbol()
 {
-    // Implementacja ruchu dla klasy Base
+    return this->symbol;
 }
+
+int Base::getGold()
+{
+    return this->gold;
+}
+
+void Base::setGold(int goldToSet)
+{
+    this->gold = goldToSet;
+}
+
+Instance *Base::getCharacterInProgress()
+{
+    return this->characterInProgress;
+}
+
+void Base::setCharacterInProgress(Instance *character)
+{
+    this->characterInProgress = character;
+}
+
+bool Base::getUnitInProgress()
+{
+    return this->unitInProgress;
+}
+
+void Base::setUnitInProgress(bool status)
+{
+    this->unitInProgress = status;
+}
+
+
+

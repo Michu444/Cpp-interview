@@ -1,7 +1,8 @@
 #include "Instance.h"
 
-Instance::Instance(World * world,int hitPoints, int speed, int cost, int attack_range, int building_time, int pos_x, int pos_y)
+Instance::Instance(World * world, int hitPoints, int speed, int cost, int attack_range, int building_time, int pos_x, int pos_y)
 {
+    this->world = world;
     this->hitPoints = hitPoints;
     this->speed = speed;
     this->cost = cost;
@@ -10,4 +11,7 @@ Instance::Instance(World * world,int hitPoints, int speed, int cost, int attack_
     this->pos_x = pos_x;
     this->pos_y = pos_y;
 }
+
+Instance::~Instance()
+= default;
 

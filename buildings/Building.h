@@ -11,6 +11,11 @@ public:
     void action() override;
 
     void move() override;
+
+    int getPosX() override;
+    int getPosY() override;
+
+
 };
 
 #endif

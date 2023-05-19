@@ -32,9 +32,8 @@ int main()
         if (option == 'N')
         {
             world = new World(12, 12);
-            world->createMap();
 
-            //        world->displayMap();
+            world->displayMap();
 
         } else if (option == 'L')
         {

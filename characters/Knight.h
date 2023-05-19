@@ -4,15 +4,17 @@
 
 class Knight : public Character
 {
+protected:
 
 public:
 
-    Knight(World* world, int hitPoints, int speed, int cost, int attack_range, int building_time, int pos_x, int pos_y);
+    Knight(World* world, int pos_x, int pos_y); // creating factory new object
+
+    Knight(World* world, int hitPoints, int pos_x, int pos_y, int buildingCounter); // creating Knight probably read from file
 
     void action() override;
 
     void move() override;
-
 
 };
 

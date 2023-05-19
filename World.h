@@ -5,6 +5,9 @@
 
 using namespace std;
 
+/*
+ * The World class contains all the mechanics of operating the game.
+ */
 
 class World
 {
@@ -16,14 +19,15 @@ protected:
 
 
     Instance ***map{};
-    int map_size_x, map_size_y;
+    int mapSizeX, mapSizeY;
+    int maxMapSize = mapSizeX * mapSizeY;
 
     int playersTurn;
 
 
 
 public:
-    World(int map_size_x, int map_size_y);
+    World(int mapSizeX, int mapSizeY);
 
     ~World();
 
@@ -39,13 +43,19 @@ public:
 
     void increaseRound();
 
-    void createCharacter();
+    void createExistingCharacter(Instance* instance);
 
-    void removeCharacter();
+    void createCharacterInBase(Base *base);
+
+    void removeInstanceFromGame(Instance *instance, int posX, int posY);
+
+    void setBaseDuringCrafting(Base *base, Instance *character, bool status, int goldToSub);
 
     void makeRound();
 
-    void setInstance(Instance *instance, int pos_x, int pos_y);
+    void setInstanceOnMap(Instance *instance, int pos_x, int pos_y);
+
+    bool checkMapField(int posX, int posY);
 
     void handleBuilding(Building *building);
     void handleCharacter(Character *character);

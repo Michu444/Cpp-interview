@@ -5,11 +5,24 @@ Character::Character(World* world, int hitPoints, int speed, int cost, int attac
 {}
 
 void Character::action()
-{
-    //...
-}
+{}
 
 void Character::move()
 {}
+
+char Character::getSymbol()
+{
+    return this->symbol;
+}
+
+int Character::getPosX()
+{
+    return this->pos_x;
+}
+
+int Character::getPosY()
+{
+    return this->pos_y;
+}
 
 
