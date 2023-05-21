@@ -1,26 +1,235 @@
 #include "Character.h"
+#include "../World.h"
 
-Character::Character(World* world, int hitPoints, int speed, int cost, int attack_range, int building_time, int posX, int posY)
-:Instance(world, hitPoints, speed, cost, attack_range, building_time, posX, posY)
+Character::Character(World* world, int hitPoints, int speed, int cost, int attackRange, int buildingTime, int posX, int posY)
+:Instance(world, hitPoints, speed, cost, attackRange, buildingTime, posX, posY)
 {}
 
+/*
+ * Support action for characters
+ */
 void Character::action()
 {}
 
+int Character::getAttackRange()
+{
+    return this->attackRange;
+}
+
+int Character::getBuildingTime()
+{
+    return this->buildingTime;
+}
+
+bool Character::getNewUnitStatus()
+{
+    return this->newUnitStatus;
+}
+
+/*
+ * Support move for characters
+ */
 void Character::move()
-{}
-
-char Character::getSymbol()
 {
-    return this->symbol;
-}
+    bool up = false, down = false, left = false, right = false;
 
-int Character::getPosX()
-{
-    return this->posX;
-}
+    int maxMapX = this->world->getMapSizeX() - 1;
+    int maxMapY = this->world->getMapSizeY() - 1;
 
-int Character::getPosY()
-{
-    return this->posY;
+    if (maxMapX > 0 && maxMapY > 0)
+    {
+
+        // left up corner
+        if (this->getPosX() == 0 && this->getPosY() == 0)
+        {
+            right = true;
+            down = true;
+        }
+        // right up corner
+        else if (this->getPosY() == 0 && this->getPosX() == maxMapX)
+        {
+            left = true;
+            down = true;
+        }
+        // left down corner
+        else if (this->getPosX() == 0 &&  this->getPosY() == maxMapY)
+        {
+            up = true;
+            right = true;
+        }
+        // right down corner
+        else if (this->getPosY() == maxMapY && this->getPosX() == maxMapX)
+        {
+            up = true;
+            left = true;
+        }
+        else if ((this->getPosX() == 0 && this->getPosY() > 0) || (this->getPosY() == 0 && this->getPosX() > 0))
+        {
+            // near up X axis
+            if (this->getPosX() > 0 && this->getPosX() < maxMapX && this->getPosY() == 0)
+            {
+                left = true;
+                right = true;
+                down = true;
+            }
+                // near down X axis
+            else if (this->getPosX() > 0 && this->getPosX() < maxMapX && this->getPosY() == maxMapY)
+            {
+                left = true;
+                right = true;
+                up = true;
+            }
+                // near left Y axis
+            else if (this->getPosY() > 0 && this->getPosY() < maxMapY && this->getPosX() == 0 )
+            {
+                up = true;
+                down = true;
+                right = true;
+            }
+                // near right Y axis
+            else if (this->getPosY() > 0 && this->getPosY() < maxMapY && this->getPosX() == maxMapX )
+            {
+                up = true;
+                down = true;
+                left = true;
+            }
+        }
+            // in the middle - min 1 unit from the X or Y axis
+        else
+        {
+            left = true;
+            right = true;
+            down = true;
+            up = true;
+        }
+    }
+
+
+    char choose;
+    bool correctChoose = false;
+    int newX = this->getPosX();
+    int newY = this->getPosY();
+
+    while(!correctChoose)
+    {
+        world->displayMap();
+
+        // print info after unavailable choose
+        if (choose == 'W' || choose == 'S' || choose == 'A' || choose == 'D' || choose == 'Q') // TODO CHECK IF WORKING
+        {
+            std::cout << "\nYou cant move here! Try again!\n\n";
+        }
+
+        std::cout << "Possible move for " << this->getName() << " (current: (" << this->getPosX() << ", " << this->getPosY() << ")) \n";
+        std::cout << "---------------\n\n";
+
+        // check up possible position
+        if (up && this->world->checkMapField(this, this->getPosX(),this->getPosY() - 1))
+        {
+            std::cout << "[W] UP: (" << this->getPosX() << ", " << this->getPosY() - 1 << ")\n";
+        }
+        else
+        {
+            up = false;
+        }
+
+        // check right possible position
+        if (right && this->world->checkMapField(this, this->getPosX() + 1,this->getPosY()))
+        {
+            std::cout << "[D] RIGHT: (" << this->getPosX() + 1 << ", " << this->getPosY() << ")\n";
+        }
+        else
+        {
+            right = false;
+        }
+
+        // check down possible position
+        if (down && this->world->checkMapField(this, this->getPosX(),this->getPosY() + 1))
+        {
+            std::cout << "[S] DOWN: (" << this->getPosX() << ", " << this->getPosY() + 1 << ")\n";
+        }
+        else
+        {
+            down = false;
+        }
+
+        // check left possible position
+        if (left && this->world->checkMapField(this, this->getPosX() - 1,this->getPosY()))
+        {
+            std::cout << "[A] LEFT: (" << this->getPosX() - 1 << ", " << this->getPosY() << ")\n";
+        }
+        else
+        {
+            left = false;
+        }
+
+        std::cout << "[Q] Skip move" << "\n";
+
+        //checking if any position is possible
+        if (!up && !right && !down && !left)
+        {
+            std::cout << "You cant move anywhere!";
+            return;
+        }
+
+        std::cout << "Where you want to move? ";
+        choose = getch();
+        choose = toupper(choose);
+
+       switch(choose)
+       {
+           case 'W':
+           {
+               if (up)
+               {
+                   newY = this->getPosY() - 1;
+                   correctChoose = true;
+               }
+               break;
+           }
+           case 'D':
+           {
+               if (right)
+               {
+                   newX = this->getPosX() + 1;
+                   correctChoose = true;
+               }
+               break;
+           }
+           case 'S':
+           {
+               if (down)
+               {
+                   newY= this->getPosY() + 1;
+                   correctChoose = true;
+               }
+               break;
+           }
+           case 'A':
+           {
+               if (left)
+               {
+                   newX = this->getPosX() - 1;
+                   correctChoose = true;
+               }
+               break;
+           }
+           case 'Q':
+           {
+               return;
+           }
+           default:
+           {
+               std::cout << "Invalid option! Try again.";
+               break;
+           }
+       }
+    }
+
+    if (this->newUnitStatus)
+    {
+        this->newUnitStatus = false;
+    }
+
+    this->world->setInstanceOnMap(this, newX, newY);
 }

@@ -5,22 +5,20 @@
 class Character :public Instance
 {
 protected:
-
-    bool movePossible{};
-    char symbol{};
+    bool newUnitStatus; // change on false if unit move after created
 
 public:
-    Character(World* world, int hitPoints, int speed, int cost, int attack_range, int building_time, int posX, int posY);
+    Character(World* world, int hitPoints, int speed, int cost, int attackRange, int buildingTime, int posX, int posY);
 
     void action() override;
 
     void move() override;
 
-    char getSymbol() override;
+    int getAttackRange();
 
+    int getBuildingTime();
 
-    int getPosX() override;
-    int getPosY() override;
+    bool getNewUnitStatus();
 };
 
 #endif

@@ -8,9 +8,6 @@ class Obstacle :public Building
 public:
     Obstacle(World* world, int posX, int posY);
 
-    void action() override;
-
-    void move() override;
 };
 
 

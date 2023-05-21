@@ -25,8 +25,3 @@ void SwordsMan::action()
     //...
 }
 
-void SwordsMan::move()
-{
-    //...
-}
-

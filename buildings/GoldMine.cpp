@@ -3,15 +3,12 @@
 GoldMine::GoldMine(World* world, int posX, int posY)
         : Building(world, 0, 0, 0, 0, 0, posX, posY)
 {
-    occupied = false;
+    this->occupied = false;
+    this->symbol = '6';
+    this->name = "Gold Mine";
 }
 
-void GoldMine::action()
+char GoldMine::getSymbol()
 {
-    // Implementacja akcji dla klasy
-}
-
-void GoldMine::move()
-{
-    // Implementacja ruchu dla klasy
+    return this->symbol;
 }

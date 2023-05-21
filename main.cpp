@@ -3,15 +3,6 @@
 #include <iostream>
 #include <conio.h>
 
-void display_menu()
-{
-    std::cout << "----- MAIN MENU -----" << "\n";
-    std::cout << " N - Create new game " << "\n";
-    std::cout << " L - Load game       " << "\n";
-    std::cout << " Q - Quit game       " << "\n";
-
-}
-
 int main()
 {
     char option;
@@ -44,7 +35,7 @@ int main()
         {
             system("cls");
             std::cout << "GOOD BYE!";
-            getch();
+            std::cin.get();
             exit(0);
         } else if (option == 'I')
         {
@@ -62,7 +53,6 @@ int main()
     do
     {
         world->makeRound();
-        getch();
 
     } while (!world->getGameStatus());
 

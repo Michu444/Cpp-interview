@@ -5,12 +5,10 @@
 class Base : public Building
 {
 protected:
-    char symbol;
 
     long int gold;
-    World *world;
 
-    Instance *characterInProgress{};
+    Instance *characterInBase{};
     bool unitInProgress{};
 
     int numberOfUnits;
@@ -20,8 +18,6 @@ public:
 
     void action() override;
 
-    char getSymbol() override;
-
     long int getGold();
 
     void setGold(long int goldToSet);
@@ -30,13 +26,11 @@ public:
 
     void setNumberOfUnits(int numberOfUnits);
 
-    Instance *getCharacterInProgress();
+    Instance *getCharacterInBase();
 
-    void setCharacterInProgress(Instance *character);
+    void setCharacterInBase(Instance *character);
 
     bool getStatusInProgress();
-
-    void displayBaseInfo();
 
     void setStatusInProgress(bool status);
 

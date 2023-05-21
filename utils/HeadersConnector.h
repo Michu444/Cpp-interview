@@ -7,11 +7,15 @@
 
 #include "../Instance.h"
 #include "../characters/Character.h"
+#include "../characters/Knight.h"
+#include "../characters/Worker.h"
 #include "../buildings/Building.h"
 #include "../buildings/Base.h"
-#include "../characters/Knight.h"
+#include "../buildings/GoldMine.h"
+#include "../buildings/Obstacle.h"
 #include "../utils/SettingsReader.h"
-#include <thread>
+#include <list>
+#include <memory>
 
 
 #endif

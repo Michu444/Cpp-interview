@@ -22,8 +22,7 @@ protected:
 
     Base *player_1, *player_2;
 
-
-
+    void addTestUnits();
 public:
     World(int mapSizeX, int mapSizeY);
 
@@ -41,7 +40,7 @@ public:
 
     void increaseRound();
 
-    void placeExistingCharacter(Instance* instance);
+    void placeSavedExistingCharacter(Instance* instance);
 
     void createCharacterInBase(Base *base);
 
@@ -53,7 +52,9 @@ public:
 
     void setInstanceOnMap(Instance *instance, int posX, int posY);
 
-    bool checkMapField(int posX, int posY);
+    bool checkMapField(Instance *instance, int posX, int posY);
+
+    void makeAllCharactersMovePossibility();
 
     void handleBuilding(Building *building);
     void handleCharacter(Character *character);
@@ -65,6 +66,11 @@ public:
     static char displayMenu();
 
     static void displayGameInfo();
+
+    int getMapSizeX();
+    int getMapSizeY();
+
+    bool mapFieldEmpty(int posX, int posY);
 };
 
 

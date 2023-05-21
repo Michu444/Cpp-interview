@@ -1,13 +1,13 @@
 #include "Instance.h"
 
-Instance::Instance(World * world, int hitPoints, int speed, int cost, int attack_range, int building_time, int posX, int posY)
+Instance::Instance(World * world, int hitPoints, int speed, int cost, int attackRange, int buildingTime, int posX, int posY)
 {
     this->world = world;
     this->hitPoints = hitPoints;
     this->speed = speed;
     this->cost = cost;
-    this->attack_range = attack_range;
-    this->building_time = building_time;
+    this->attackRange = attackRange;
+    this->buildingTime = buildingTime;
     this->posX = posX;
     this->posY = posY;
 }
@@ -41,6 +41,48 @@ void Instance::setMovePossible(bool status)
 {
     this->movePossible = status;
 }
+
+void Instance::setPosX(int newPosX)
+{
+    this->posX = newPosX;
+}
+
+void Instance::setPosY(int newPosY)
+{
+    this->posY = newPosY;
+}
+
+int Instance::getPosX() const
+{
+    return this->posX;
+}
+
+int Instance::getPosY() const
+{
+    return this->posY;
+}
+
+
+char Instance::getBaseSymbol() const
+{
+    return this->baseSymbol;
+}
+
+void Instance::setBaseSymbol(char symbol)
+{
+    this->baseSymbol = symbol;
+}
+
+int Instance::getSpeed() const
+{
+    return this->speed;
+}
+
+char Instance::getSymbol()
+{
+    return this->symbol;
+}
+
 
 Instance::~Instance()
 = default;

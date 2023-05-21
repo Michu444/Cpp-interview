@@ -12,8 +12,6 @@ public:
 
     void action() override;
 
-    void move() override;
-
 };
 
 #endif

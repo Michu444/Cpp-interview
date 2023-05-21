@@ -1,17 +1,17 @@
-#ifndef INTERVIEW_BASE_H
-#define INTERVIEW_BASE_H
+#ifndef INTERVIEW_GOLDMINE_H
+#define INTERVIEW_GOLDMINE_H
 #include "Building.h"
 
 class GoldMine : public Building
 {
     bool occupied;
+    int goldPerRound = 50;
 
 public:
     GoldMine(World* world, int posX, int posY);
 
-    void action() override;
+    char getSymbol() override;
 
-    void move() override;
 };
 
 #endif
