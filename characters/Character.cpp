@@ -24,5 +24,3 @@ int Character::getPosY()
 {
     return this->posY;
 }
-
-

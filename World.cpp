@@ -11,6 +11,7 @@ World::World(int mapSizeX, int mapSizeY)
 {
     this->mapSizeX = mapSizeX;
     this->mapSizeY = mapSizeY;
+    this->maxMapSize = mapSizeX * mapSizeY;
 
     round = 0;
     numberOrganisms = 0;
@@ -20,11 +21,11 @@ World::World(int mapSizeX, int mapSizeY)
 
     player_1 = new Base(this, 0, 0, '1');
 
-    player_2 = new Base(this, 11, 11, '2');
+//    player_2 = new Base(this, 11, 11, '2');
 
     this->setInstanceOnMap(player_1, 0, 0);
 
-    this->setInstanceOnMap(player_2, 11, 11);
+//    this->setInstanceOnMap(player_2, 11, 11);
 
 }
 
@@ -51,7 +52,7 @@ World::~World()
 void World::makeRound()
 {
     system("cls");
-    this->displayMap();
+
 
     if (round >= 2000 || player_1->getHitPoints() <= 0 && player_2->getHitPoints() <= 0) // TODO maybe add var if gameEnd == true do this too..
     {
@@ -67,22 +68,39 @@ void World::makeRound()
     {
         for (int x = 0; x < this->mapSizeY; ++x)
         {
+
             if (auto *building = dynamic_cast<Building*>(map[x][y]))
             {
                 this->handleBuilding(building);
+                std::cout << "\nPRESS ENTER TO CONTINUE\n";
+                getch();
 
-            }else if (auto *character = dynamic_cast<Character*>(map[x][y]))
+            }
+            else if (auto *character = dynamic_cast<Character*>(map[x][y]))
             {
-//                this->handleCharacter(character);
-                continue;
+                if (map[x][y]->getMovePossible())
+                {
+//                    this->handleCharacter(character);
+                    std::cout << "\nPRESS ENTER TO CONTINUE\n";
 
-            }else if (map[x][y] == nullptr)
+                    getch();
+                }
+                else
+                {
+                    std::cout << "Unit: " << map[x][y]->getName() << " at position: (" << map[x][y]->getPosX()
+                              << ", " << map[x][y]->getPosY() << ") cant move!\n";
+                }
+
+                continue;
+            }
+            else if (map[x][y] == nullptr)
             {
                 continue;
             }
             else
             {
                 throw std::logic_error("UNRECOGNIZED OBJECT ON THE MAP!");
+                exit(1);
             }
         }
     }
@@ -100,21 +118,25 @@ void World::handleCharacter(Character *character)
 {
     while(true)
     {
+        system("cls"); // TODO CHANGE ON LINUX COMMAND
+        this->displayMap();
+        std::cout << "\n---------------------";
         int choose;
         std::cout << "Character turn: " << character->getName() << " at position: (" << character->getPosX() << ", " << character->getPosY() << ")\n";
         std::cout << "[1] Move character" << "\n";
         std::cout << "[2] Make action!" << "\n";
-        std::cout << "What you want to do: ";
-        std::cin >> choose;
+        std::cout << "What do you want to do? ";
+        choose = getch();
+        std::cout << "\n\n";
 
         switch(choose)
         {
-            case 1:
+            case '1':
             {
                character->move();
                return;
             }
-            case 2:
+            case '2':
             {
                 character->action();
                 return;
@@ -122,6 +144,7 @@ void World::handleCharacter(Character *character)
             default:
             {
                 std::cout << "Wrong option! Try again." << "\n";
+                break;
             }
         }
     }
@@ -135,10 +158,27 @@ void World::handleCharacter(Character *character)
  */
 void World::handleBuilding(Building *building)
 {
-    if (building->getName() == "Base")
+    if (Base *base = dynamic_cast<Base*>(building))
     {
-        std::cout << "\nBase turn" << " at position: (" << building->getPosX() << ", " << building->getPosY() << ")\n";
+        if (base->getStatusInProgress() && base->getBuildingCounter() > 0)
+        {
+            base->setBuildingCounter(base->getBuildingCounter() - 1);
+        }
+        else if ( base->getStatusInProgress() && base->getBuildingCounter() == 0)
+        {
+            this->numberOrganisms++;
+            base->setNumberOfUnits(base->getNumberOfUnits() + 1);
+            base->setStatusInProgress(false);
+            // TODO ADD UNIT ON MAP - THINK ABOUT HOW TO ADD IT ON BASE FIELD
+        }
+        else if (!base->getStatusInProgress() && base->getBuildingCounter() == 0 && base->getCharacterInProgress())
+        {
+            std::cout << "You can move your new character from base!\n";
+
+            base->getCharacterInProgress()->move();
+        }
     }
+
     building->action();
 }
 
@@ -166,32 +206,52 @@ void World::placeExistingCharacter(Instance* instance)
  */
 void World::createCharacterInBase(Base *base)
 {
-    int option;
 
-    if (numberOrganisms < maxMapSize)
+    if (numberOrganisms < maxMapSize && !base->getStatusInProgress())
     {
         while(true)
         {
-            std::cout << "[1] Knight" << "\n";
-            std::cout << "[2] Cancel" << "\n";
-            std::cout << "Which character do you want to create: ";
-            std::cin >> option;
+            int choose;
 
-            if (option == 1 && base->getGold() >= 400 )
+            std::cout << "[1] Knight" << "\n";
+            std::cout << "[2] Skip round" << "\n";
+            std::cout << "Which character do you want to create? ";
+            choose = getch();
+            std::cout << "\n";
+
+            switch(choose)
             {
-                auto *knight = new Knight(this, base->getPosX(), base->getPosY());
-                this->setBaseDuringCrafting(base, knight, true, 400);
-                this->numberOrganisms++;
-            }
-            else if (option == 2)
-            {
-                return;
-            }
-            else
-            {
-                std::cout << "Wrong option or you don't have enough gold! Try again.";
+                case '1':
+                {
+                    if (base->getGold() >= 400)
+                    {
+                        Knight *knight = new Knight(this, base->getPosX(), base->getPosY());
+                        this->setBaseDuringCrafting(base, knight, true, 400);
+                        return;
+                    }
+                    else
+                    {
+                        std::cout << "\nYou dont have enough gold!" << "\n\n";
+                    }
+
+                }
+                case '2':
+                {
+                    return;
+                }
+                default:
+                {
+                    std::cout << "Wrong option! Try again." << "\n";
+                    break;
+                }
             }
         }
+    }
+    else if (numberOrganisms < maxMapSize && base->getStatusInProgress())
+    {
+        base->getCharacterInProgress()->setBuildingCounter(base->getCharacterInProgress()->getBuildingCounter() - 1);
+        std::cout << "Rounds to end " << base->getCharacterInProgress()->getName() << " creating: "
+                  << base->getCharacterInProgress()->getBuildingCounter();
     }
     else
     {
@@ -214,6 +274,7 @@ void World::removeInstanceFromGame(Instance *instance, int posX, int posY)
     this->map[posX][posY] = nullptr;
     delete instance;
     this->numberOrganisms--;
+    // TODO add option to remove unit from base counters
 }
 
 
@@ -225,11 +286,12 @@ void World::removeInstanceFromGame(Instance *instance, int posX, int posY)
  * @param status: Crafting status in base.
  * @param goldToSub: Number of gold to subtract from base gold.
  */
-void World::setBaseDuringCrafting(Base* base, Instance *character, bool status, int goldToSub)
+void World::setBaseDuringCrafting(Base* base, Instance *character, bool status, long int goldToSub)
 {
     base->setCharacterInProgress(character);
-    base->setUnitInProgress(status);
-    base->setGold(base->getGold()- goldToSub);
+    base->setStatusInProgress(status);
+    base->setGold(base->getGold() - goldToSub);
+    base->setBuildingCounter(character->getBuildingCounter());
 }
 
 
@@ -302,13 +364,28 @@ void World::endGame()
 {
     Base *winner;
 
-    if (player_1->getHitPoints() > player_2->getHitPoints())
+    if (this->getRound() >= 2000 && player_1->getHitPoints() > 0 && player_2->getHitPoints() > 0)
+    {
+        if (player_1->getNumberOfUnits() > player_2->getNumberOfUnits())
+        {
+            winner = player_1;
+        }
+        else
+        {
+            winner = player_2;
+        }
+    }
+    else if (player_1->getHitPoints() > player_2->getHitPoints())
     {
         winner = player_1;
     }
-    else
+    else if (player_1->getHitPoints() < player_2->getHitPoints())
     {
         winner = player_2;
+    }
+    else
+    {
+        std::cout << "SOMETHING IS WRONG!" << "\n"; // TODO REMOVE
     }
 
     system("cls"); // TODO CHANGE IT
@@ -343,12 +420,45 @@ void World::createMap() // remember to delete all map objects
     }
 }
 
+void World::displayInstanceInfo(Instance *instance)
+{
+    if(Base *base = dynamic_cast<Base*>(instance))
+    {
+        std::cout << "\n---------------------";
+        std::cout << "\nBase turn" << " at position: (" << base->getPosX() << ", " << base->getPosY() << ")\n";
+        std::cout << "Gold: " << base->getGold() << "\n";
+        std::cout << "Units: " << base->getNumberOfUnits() << "\n\n";
+
+        if (base->getStatusInProgress())
+        {
+            std::cout << "Unit in progress: " << base->getCharacterInProgress()->getName() << "(rounds left: "
+                      << base->getBuildingCounter() << ") \n\n";
+        }
+
+        std::cout << "[1] Skip this round" << "\n";
+
+        if (!base->getStatusInProgress())
+        {
+            std::cout << "[2] Create new character" << "\n";
+        }
+    }
+    else if (Character *character = dynamic_cast<Character*>(instance))
+    {
+        // TODO DISPLAY INFO CHARACTER - hp, and other
+    }
+    else
+    {
+        // TODO IDK WHAT TO DO
+    }
+}
 
 /*
  * Displays a representation of the map object. Each cell contains object or empty field.
  */
 void World::displayMap()
 {
+    system("cls");
+
     // display first index row
     for (int i = 0; i < mapSizeX; i++)
     {

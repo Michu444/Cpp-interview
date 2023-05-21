@@ -3,10 +3,6 @@
 #include <iostream>
 #include <conio.h>
 
-#define ENTER 13
-#define Q 113
-#define N 110
-
 void display_menu()
 {
     std::cout << "----- MAIN MENU -----" << "\n";
@@ -22,7 +18,7 @@ int main()
     World *world = nullptr;
 
     // MAIN MENU LOOP
-    do
+    do // TODO CHANGE ON SWITCH WITH GETCH
     {
 //        option = World::displayMenu(); //TODO UNCOMMENT
         option = 'N';
@@ -30,7 +26,6 @@ int main()
         if (option == 'N')
         {
             world = new World(12, 12);
-
 
         } else if (option == 'L')
         {
@@ -57,8 +52,11 @@ int main()
         } else
         {
             throw std::runtime_error("PROGRAM CRASHED! PLEASE RUN GAME AGAIN");
+            exit(1);
         }
     } while (option != 'N' && option != 'L');
+
+    world->displayMap();
 
     // MAIN GAME LOOP
     do

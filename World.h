@@ -18,7 +18,7 @@ protected:
 
     Instance ***map{};
     int mapSizeX, mapSizeY;
-    int maxMapSize = mapSizeX * mapSizeY;
+    int maxMapSize;
 
     Base *player_1, *player_2;
 
@@ -47,7 +47,7 @@ public:
 
     void removeInstanceFromGame(Instance *instance, int posX, int posY);
 
-    void setBaseDuringCrafting(Base *base, Instance *character, bool status, int goldToSub);
+    void setBaseDuringCrafting(Base *base, Instance *character, bool status, long int goldToSub);
 
     void makeRound();
 
@@ -59,6 +59,8 @@ public:
     void handleCharacter(Character *character);
 
     void endGame();
+
+    void displayInstanceInfo(Instance *instance);
 
     static char displayMenu();
 

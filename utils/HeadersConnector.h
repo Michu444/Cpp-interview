@@ -11,6 +11,7 @@
 #include "../buildings/Base.h"
 #include "../characters/Knight.h"
 #include "../utils/SettingsReader.h"
+#include <thread>
 
 
 #endif

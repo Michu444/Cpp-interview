@@ -2,6 +2,7 @@
 #define INTERVIEW_INSTANCE_H
 #include <iostream>
 #include <string>
+#include <conio.h>
 
 class World;
 
@@ -16,6 +17,8 @@ protected:
     int attack_range;
     int building_time;
     std::string name;
+    int buildingCounter{};
+    bool movePossible{};
 
 
 
@@ -36,6 +39,14 @@ public:
     virtual int getHitPoints();
 
     virtual std::string getName();
+
+    virtual bool getMovePossible();
+
+    virtual void setMovePossible(bool status);
+
+    // global inheritance for future creating building by base
+    virtual int getBuildingCounter();
+    virtual void setBuildingCounter(int buildingCounter);
 
     virtual ~Instance();
 };

@@ -8,52 +8,51 @@ Base::Base(World* world, int posX, int posY, char symbol)
     this->world = world;
     this->gold = 2000;
     name = "Base";
+    numberOfUnits = 0;
 }
 
 void Base::action()
 {
-    int choose;
-
     while (true)
     {
-        std::cout << "[1] Skip this round" << "\n";
+        int choose;
 
-        if (!unitInProgress)
-        {
-            std::cout << "[2] Create new character" << "\n";
-        }
+        system("cls"); // TODO change on linux command
+        world->displayMap();
+        world->displayInstanceInfo(this);
 
-        std::cout << "What you want do to: ";
-        std::cin >> choose;
+        std::cout << "What do you want to do? ";
+        choose = getch();
+        std::cout << "\n\n";
 
         switch (choose)
         {
-            case 1:
+            case '1':
             {
                 return;
             }
-            case 2:
+            case '2':
             {
                 if (!unitInProgress)
                 {
                     this->world->createCharacterInBase(this);
+                    std::cout << "Started creating: " << this->getCharacterInProgress()->getName() << "\n";
+                    std::cout << "Rounds to create: " << this->getCharacterInProgress()->getBuildingCounter() << "\n";
                     return;
                 }
                 else
                 {
-                    std::cout << "\nInvalid option. Please choose again.\n\n";
+                    std::cout << "\nInvalid option! Please choose again.\n\n";
+                    break;
                 }
-
             }
             default:
             {
-                std::cout << "\nInvalid option. Please choose again.\n\n";
+                std::cout << "\nInvalid option! Please choose again.\n\n";
+                break;
             }
         }
     }
-
-
-
 }
 
 char Base::getSymbol()
@@ -61,14 +60,24 @@ char Base::getSymbol()
     return this->symbol;
 }
 
-int Base::getGold()
+long int Base::getGold()
 {
     return this->gold;
 }
 
-void Base::setGold(int goldToSet)
+void Base::setGold(long int goldToSet)
 {
     this->gold = goldToSet;
+}
+
+int Base::getNumberOfUnits()
+{
+    return this->numberOfUnits;
+}
+
+void Base::setNumberOfUnits(int numberOfUnits)
+{
+    this->numberOfUnits = numberOfUnits;
 }
 
 Instance *Base::getCharacterInProgress()
@@ -81,12 +90,12 @@ void Base::setCharacterInProgress(Instance *character)
     this->characterInProgress = character;
 }
 
-bool Base::getUnitInProgress()
+bool Base::getStatusInProgress()
 {
     return this->unitInProgress;
 }
 
-void Base::setUnitInProgress(bool status)
+void Base::setStatusInProgress(bool status)
 {
     this->unitInProgress = status;
 }

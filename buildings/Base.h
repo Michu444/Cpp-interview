@@ -7,11 +7,13 @@ class Base : public Building
 protected:
     char symbol;
 
-    int gold;
+    long int gold;
     World *world;
 
-    Instance *characterInProgress;
-    bool unitInProgress;
+    Instance *characterInProgress{};
+    bool unitInProgress{};
+
+    int numberOfUnits;
 
 public:
     Base(World* world, int posX, int posY, char symbol);
@@ -20,17 +22,23 @@ public:
 
     char getSymbol() override;
 
-    int getGold();
+    long int getGold();
 
-    void setGold(int goldToSet);
+    void setGold(long int goldToSet);
+
+    int getNumberOfUnits();
+
+    void setNumberOfUnits(int numberOfUnits);
 
     Instance *getCharacterInProgress();
 
     void setCharacterInProgress(Instance *character);
 
-    bool getUnitInProgress();
+    bool getStatusInProgress();
 
-    void setUnitInProgress(bool status);
+    void displayBaseInfo();
+
+    void setStatusInProgress(bool status);
 
 };
 

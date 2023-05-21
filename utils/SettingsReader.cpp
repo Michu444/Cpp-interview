@@ -32,7 +32,9 @@ char** SettingsReader::readMap()
         }
         else if (line.size() != columns)
         {
-            throw std::runtime_error("Niezgodna liczba kolumn!");
+            throw std::runtime_error("Invaild columns on file map!");
+            exit(1);
+
         }
 
         map[rows] = new char[columns];

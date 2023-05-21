@@ -22,6 +22,26 @@ int Instance::getHitPoints()
     return this->hitPoints;
 }
 
+int Instance::getBuildingCounter()
+{
+    return this->buildingCounter;
+}
+
+void Instance::setBuildingCounter(int counter)
+{
+    this->buildingCounter = counter;
+}
+
+bool Instance::getMovePossible()
+{
+    return this->movePossible;
+}
+
+void Instance::setMovePossible(bool status)
+{
+    this->movePossible = status;
+}
+
 Instance::~Instance()
 = default;
 

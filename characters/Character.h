@@ -7,7 +7,6 @@ class Character :public Instance
 protected:
 
     bool movePossible{};
-    int buildingCounter{};
     char symbol{};
 
 public:
@@ -19,9 +18,9 @@ public:
 
     char getSymbol() override;
 
+
     int getPosX() override;
     int getPosY() override;
-
 };
 
 #endif
