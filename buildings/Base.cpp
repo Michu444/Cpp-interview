@@ -46,7 +46,7 @@ void Base::action()
             }
             case '2':
             {
-                if (!unitInProgress)
+                if (!this->getStatusInProgress() && this->getCharacterInBase() == nullptr)
                 {
                     this->world->createCharacterInBase(this);
                     return;
