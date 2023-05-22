@@ -7,10 +7,11 @@ class Building :public Instance
 public:
     Building(World* world, int hitPoints, int speed, int cost, int attackRange, int buildingTime, int posX, int posY);
 
-    void action() override;
+    int getAttackValue(const std::string& unitName) const override;
+
     void move() override;
 
-
+    void action() override;
 
 
 };

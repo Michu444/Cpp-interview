@@ -1,45 +1,46 @@
-#include <iostream>
-#include <conio.h>
-#include <windows.h>
 #include "World.h"
 
 
-/*
- * Basic constructor to create game world.
- */
 
 // adding units on world and place it on map
 void World::addTestUnits()
 {
-    // TESTING BASES
+// TESTING UNITS
+
     player_1 = new Base(this, 0, 0, '1');
     this->setInstanceOnMap(player_1, 0, 0);
 
     player_2 = new Base(this, 11, 11, '2');
     this->setInstanceOnMap(player_2, 11, 11);
 
-
-//    // ADDING GOLDMINES
-//    GoldMine *goldmine1 = new GoldMine(this, 3,3);
-//    this->setInstanceOnMap(goldmine1, 3, 3);
-//    GoldMine *goldmine2 = new GoldMine(this, 3,4);
-//    this->setInstanceOnMap(goldmine2, 3, 4);
-//    GoldMine *goldmine3 = new GoldMine(this, 4,4);
-//    this->setInstanceOnMap(goldmine3, 4, 4);
-//    GoldMine *goldmine4 = new GoldMine(this, 3,5);
-//    this->setInstanceOnMap(goldmine4, 3, 5);
-//    GoldMine *goldmine5 = new GoldMine(this, 4,5);
-//    this->setInstanceOnMap(goldmine5, 4, 5);
-//    GoldMine *goldmine6 = new GoldMine(this, 4,3);
-//    this->setInstanceOnMap(goldmine6, 4, 3);
-
-//    auto *knight = new Knight(this, 0, 2, '1');
+//    auto *knight = new Knight(this, 5, 5, '1');
 //    this->setInstanceOnMap(knight, knight->getPosX(), knight->getPosY());
 //    knight->setMovePossible(true);
+//    player_1->setNumberOfUnits(1);
+//    numberOrganisms++;
+//
+//
+//    auto *worker1 = new Worker(this, 5, 6, '2');
+//    this->setInstanceOnMap(worker1, worker1->getPosX(), worker1->getPosY());
+//    worker1->setMovePossible(true);
+//    player_2->setNumberOfUnits(1);
+//    numberOrganisms++;
+//
+//
+//    auto *catapult = new Catapult(this, 4, 5, '1');
+//    this->setInstanceOnMap(catapult, catapult->getPosX(), catapult->getPosY());
+//    catapult->setMovePossible(true);
+//    player_1->setNumberOfUnits(1);
 //    numberOrganisms++;
 
 }
 
+/*
+ * Basic constructor to create game world.
+ *
+ * @param mapSizeX: width map size
+ * @param mapSizeY: height map size
+ */
 World::World(int mapSizeX, int mapSizeY)
 {
     this->mapSizeX = mapSizeX;
@@ -133,10 +134,94 @@ void World::makeRound()
     this->makeAllCharactersMovePossibility();
     this->displayMap();
     std::cout << "\nEND OF THE " << this->getRound() << " ROUND! PRESS ENTER TO GO TO NEXT ROUND!";
-    getch();
+    getchar();
+    while (getchar() != '\n') {}
     this->increaseRound();
 }
 
+/*
+ * Searches for instances around that can be attacked by instance which is turn.
+ *
+ * @param instance: An instance that can attack other instance.
+ */
+std::vector<Instance*> World::displayInstancesAround(Instance *instance)
+{
+    int areaDiameter = instance->getAttackRange();
+    int instancePosX = instance->getPosX();
+    int instancePosY = instance->getPosY();
+
+    std::vector<Instance*> unitsAround;
+
+    for (int x = instancePosX - areaDiameter; x <= instancePosX + areaDiameter; ++x)
+    {
+        for (int y = instancePosY - areaDiameter; y <= instancePosY + areaDiameter; ++y)
+        {
+            if (x >= 0 && x < mapSizeX && y >= 0 && y < mapSizeY && map[x][y] != nullptr)
+            {
+                if (map[x][y]->getBaseSymbol() != instance->getBaseSymbol())
+                {
+                    if (auto *character = dynamic_cast<Character*>(map[x][y]))
+                    {
+                        unitsAround.push_back(map[x][y]);
+                    }
+                    else if(auto *base = dynamic_cast<Base*>(map[x][y]))
+                    {
+                        unitsAround.push_back(map[x][y]);
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+
+            }
+        }
+    }
+    return unitsAround;
+}
+
+
+/*
+ * Method responsible for attacking one unit against another.
+ *
+ * @param attacker: Instance that attacks
+ * @param defender: Instance that is under attack
+ */
+void World::attackUnit(Instance *attacker, Instance* defender)
+{
+    this->displayMap();
+
+    int lifePointsTaken = attacker->getAttackValue(defender->getName());
+
+    std::cout << attacker->getName() << " (" << attacker->getPosX() << ", " << attacker->getPosY() << ") attacked "
+              << defender->getName() << " (" << defender->getPosX() << ", " << defender->getPosY() << ") and gave "
+               << lifePointsTaken << " dmg !!\n\n";
+
+    defender->setHitPoints(defender->getHitPoints() - lifePointsTaken);
+
+    if (defender->getHitPoints() <= 0)
+    {
+        if (auto *base = dynamic_cast<Base*>(defender))
+        {
+            std::cout << "YOU DESTROYED ENEMY BASE!" << "\n";
+            std::this_thread::sleep_for(std::chrono::seconds(3)); // using thread lib for availability in windows and linux
+            this->gameEnd = true;
+            this->endGame();
+        }
+
+        this->removeInstanceFromGame(defender);
+        std::cout << "This attack killed " << defender->getName() << "!\n";
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(3)); // using thread lib for availability in windows and linux
+}
+
+
+void World::displayUnitStats(Instance *instance)
+{
+    std::cout << "Unit: " << instance->getName() << " (" << instance->getPosX() << ", " << instance->getPosY() << "\n";
+    std::cout << "Hit points: " << instance->getHitPoints() << "\n";
+
+}
 
 /*
  * Handle character instances in single round.
@@ -149,18 +234,22 @@ void World::handleCharacter(Character *character)
 
     while(numberMoves)
     {
-        system("cls"); // TODO CHANGE ON LINUX COMMAND
         this->displayMap();
         std::cout << "\n---------------------\n";
         int choose;
-        std::cout << "If you choose a move or an action and take no action, you lose one move point!\n\n";
+        std::cout << "If you choose a move or an action and take no action, you lose one move point (Move) or all move points (Action)!\n\n";
         this->displayInstanceInfo(character);
         std::cout << "Move points: " << numberMoves << "\n\n";
         std::cout << "[1] Move character" << "\n";
         std::cout << "[2] Make action!" << "\n";
-        std::cout << "[3] Skip the turn" << "\n";
+        std::cout << "[Q] Skip the turn" << "\n";
         std::cout << "What do you want to do? ";
-        choose = getch();
+        choose = getchar();
+        if (isalpha(choose))
+        {
+            choose = toupper(choose);
+        }
+        while (getchar() != '\n') {}
         std::cout << "\n\n";
 
 
@@ -175,10 +264,10 @@ void World::handleCharacter(Character *character)
             case '2':
             {
                 character->action();
-                numberMoves--;
+                numberMoves = 0;
                 break;
             }
-            case '3':
+            case 'Q':
             {
                 return;
             }
@@ -246,8 +335,6 @@ void World::placeSavedExistingCharacter(Instance* instance)
 void World::createCharacterInBase(Base *base)
 {
     int unitChosen = true;
-    this->displayMap();
-    this->displayInstanceInfo(base);
 
 
     if (numberOrganisms < maxMapSize && !base->getStatusInProgress())
@@ -256,6 +343,9 @@ void World::createCharacterInBase(Base *base)
         {
             int choose;
 
+            this->displayMap();
+            this->displayInstanceInfo(base);
+
             std::cout << "[1] Knight     (5 rounds) (400 gold)" << "\n";
             std::cout << "[2] Swordsman  (3 rounds) (250 gold)" << "\n";
             std::cout << "[3] Archer     (3 rounds) (250 gold)" << "\n";
@@ -263,9 +353,14 @@ void World::createCharacterInBase(Base *base)
             std::cout << "[5] Ram        (4 rounds) (500 gold)" << "\n";
             std::cout << "[6] Catapult   (6 rounds) (800 gold)" << "\n";
             std::cout << "[7] Worker     (2 rounds) (100 gold)" << "\n";
-            std::cout << "[8] Skip the turn" << "\n\n";
+            std::cout << "[Q] Skip the turn" << "\n\n";
             std::cout << "Which character do you want to create? ";
-            choose = getch();
+            choose = getchar();
+            if (isalpha(choose))
+            {
+                choose = toupper(choose);
+            }
+            while (getchar() != '\n') {}
             std::cout << "\n";
 
             switch(choose)
@@ -274,7 +369,7 @@ void World::createCharacterInBase(Base *base)
                 {
                     if (base->getGold() >= 400)
                     {
-                        auto *knight = new Knight(this, base->getPosX(), base->getPosY(), base->getSymbol());
+                        Knight *knight = new Knight(this, base->getPosX(), base->getPosY(), base->getSymbol());
                         this->setBaseDuringCrafting(base, knight, true, 400);
                         unitChosen = false;
                         break;
@@ -286,91 +381,97 @@ void World::createCharacterInBase(Base *base)
                     }
 
                 }
-//                case '2':
-//                {
-//                    if (base->getGold() >= 250)
-//                    {
-//                        auto *swordsman = new Swordsman(this, base->getPosX(), base->getPosY(), base->getSymbol());
-//                        this->setBaseDuringCrafting(base, swordsman, true, 400);
-//                        unitChosen = false;
-//                    }
-//                    else
-//                    {
-//                        std::cout << "\nYou dont have enough gold!" << "\n\n";
-//                        break;
-//                    }
-//                }
-//                case '3':
-//                {
-//                    if (base->getGold() >= 250)
-//                    {
-//                        auto *archer = new Archer(this, base->getPosX(), base->getPosY(), base->getSymbol());
-//                        this->setBaseDuringCrafting(base, archer, true, 400);
-//                        unitChosen = false;
-//                    }
-//                    else
-//                    {
-//                        std::cout << "\nYou dont have enough gold!" << "\n\n";
-//                        break;
-//                    }
-//                }
-//                case '4':
-//                {
-//                    if (base->getGold() >= 200)
-//                    {
-//                        auto *pikeman = new Pikeman(this, base->getPosX(), base->getPosY(), base->getSymbol());
-//                        this->setBaseDuringCrafting(base, pikeman, true, 400);
-//                        unitChosen = false;
-//                    }
-//                    else
-//                    {
-//                        std::cout << "\nYou dont have enough gold!" << "\n\n";
-//                        break;
-//                    }
-//                }
-//                case '5':
-//                {
-//                    if (base->getGold() >= 250)
-//                    {
-//                        auto *ram = new Ram(this, base->getPosX(), base->getPosY(), base->getSymbol());
-//                        this->setBaseDuringCrafting(base, ram, true, 400);
-//                        unitChosen = false;
-//                    }
-//                    else
-//                    {
-//                        std::cout << "\nYou dont have enough gold!" << "\n\n";
-//                        break;
-//                    }
-//                }
-//                case '6':
-//                {
-//                    if (base->getGold() >= 800)
-//                    {
-//                        auto *catapult = new Catapult(this, base->getPosX(), base->getPosY(), base->getSymbol());
-//                        this->setBaseDuringCrafting(base, catapult, true, 400);
-//                        unitChosen = false;
-//                    }
-//                    else
-//                    {
-//                        std::cout << "\nYou dont have enough gold!" << "\n\n";
-//                        break;
-//                    }
-//                }
-//                case '7':
-//                {
-//                    if (base->getGold() >= 250)
-//                    {
-//                        auto *worker = new Worker(this, base->getPosX(), base->getPosY(), base->getSymbol());
-//                        this->setBaseDuringCrafting(base, worker, true, 400);
-//                        unitChosen = false;
-//                    }
-//                    else
-//                    {
-//                        std::cout << "\nYou dont have enough gold!" << "\n\n";
-//                        break;
-//                    }
-//                }
-                case '8':
+                case '2':
+                {
+                    if (base->getGold() >= 250)
+                    {
+                        Swordsman *swordsman = new Swordsman(this, base->getPosX(), base->getPosY(), base->getSymbol());
+                        this->setBaseDuringCrafting(base, swordsman, true, 250);
+                        unitChosen = false;
+                        break;
+                    }
+                    else
+                    {
+                        std::cout << "\nYou dont have enough gold!" << "\n\n";
+                        break;
+                    }
+                }
+                case '3':
+                {
+                    if (base->getGold() >= 250)
+                    {
+                        Archer *archer = new Archer(this, base->getPosX(), base->getPosY(), base->getSymbol());
+                        this->setBaseDuringCrafting(base, archer, true, 250);
+                        unitChosen = false;
+                        break;
+                    }
+                    else
+                    {
+                        std::cout << "\nYou dont have enough gold!" << "\n\n";
+                        break;
+                    }
+                }
+                case '4':
+                {
+                    if (base->getGold() >= 200)
+                    {
+                        Pikeman *pikeman = new Pikeman(this, base->getPosX(), base->getPosY(), base->getSymbol());
+                        this->setBaseDuringCrafting(base, pikeman, true, 200);
+                        unitChosen = false;
+                        break;
+                    }
+                    else
+                    {
+                        std::cout << "\nYou dont have enough gold!" << "\n\n";
+                        break;
+                    }
+                }
+                case '5':
+                {
+                    if (base->getGold() >= 250)
+                    {
+                        Ram *ram = new Ram(this, base->getPosX(), base->getPosY(), base->getSymbol());
+                        this->setBaseDuringCrafting(base, ram, true, 250);
+                        unitChosen = false;
+                        break;
+                    }
+                    else
+                    {
+                        std::cout << "\nYou dont have enough gold!" << "\n\n";
+                        break;
+                    }
+                }
+                case '6':
+                {
+                    if (base->getGold() >= 800)
+                    {
+                        Catapult *catapult = new Catapult(this, base->getPosX(), base->getPosY(), base->getSymbol());
+                        this->setBaseDuringCrafting(base, catapult, true, 800);
+                        unitChosen = false;
+                        break;
+                    }
+                    else
+                    {
+                        std::cout << "\nYou dont have enough gold!" << "\n\n";
+                        break;
+                    }
+                }
+                case '7':
+                {
+                    if (base->getGold() >= 250)
+                    {
+                        Worker *worker = new Worker(this, base->getPosX(), base->getPosY(), base->getSymbol());
+                        this->setBaseDuringCrafting(base, worker, true, 250);
+                        unitChosen = false;
+                        break;
+                    }
+                    else
+                    {
+                        std::cout << "\nYou dont have enough gold!" << "\n\n";
+                        break;
+                    }
+                }
+                case 'Q':
                 {
                     return;
                 }
@@ -380,13 +481,17 @@ void World::createCharacterInBase(Base *base)
                     break;
                 }
             }
-            this->displayMap();
-            std::cout << "\n--------------\n";
-            std::cout << "Started creating: " << base->getCharacterInBase()->getName() << "\n";
-            std::cout << "Rounds to create: " << base->getCharacterInBase()->getBuildingCounter() << "\n";
-            Sleep(2500);
-        }
 
+            if (!unitChosen)
+            {
+                this->displayMap();
+                std::cout << "\n--------------\n";
+                std::cout << "Base: " << base->getSymbol() << "\n";
+                std::cout << "Started creating: " << base->getCharacterInBase()->getName() << "\n";
+                std::cout << "Rounds to create: " << base->getCharacterInBase()->getBuildingCounter() << "\n";
+                std::this_thread::sleep_for(std::chrono::seconds(3)); // using thread lib for availability in windows and linux
+            }
+        }
     }
     else if (numberOrganisms < maxMapSize && base->getStatusInProgress())
     {
@@ -410,12 +515,25 @@ void World::createCharacterInBase(Base *base)
  * @param posX: x coord of the object to remove.
  * @param posY: y coord of the object to remove.
  */
-void World::removeInstanceFromGame(Instance *instance, int posX, int posY)
+void World::removeInstanceFromGame(Instance *instance)
 {
-    this->map[posX][posY] = nullptr;
+    this->map[instance->getPosX()][instance->getPosY()] = nullptr;
     delete instance;
     this->numberOrganisms--;
-    // TODO add option to remove unit from base counters
+
+    // decrement number of units for specific base
+    if (instance->getBaseSymbol() == '1')
+    {
+        player_1->setNumberOfUnits(player_1->getNumberOfUnits() - 1);
+    }
+    else if (instance->getBaseSymbol() == '2')
+    {
+        player_2->setNumberOfUnits(player_2->getNumberOfUnits() - 1);
+    }
+    else
+    {
+        std::cout << "Could not recognize base player!" << "\n";
+    }
 }
 
 
@@ -551,22 +669,6 @@ int World::getMapSizeY()
 }
 
 /*
- * Checking if map position is empty or not.
- *
- * param posX: x coord to check.
- * param posY: y coord to check.
- */
-bool World::mapFieldEmpty(int posX, int posY)
-{
-    if (map[posX][posY] == nullptr)
-    {
-        return true;
-    }
-
-    return false;
-}
-
-/*
  * Summarize game and make operations during ending game.
  */
 void World::endGame()
@@ -594,7 +696,12 @@ void World::endGame()
     }
     else
     {
-        std::cout << "SOMETHING IS WRONG!" << "\n"; // TODO REMOVE
+        std::cout << "----- GAME END! -----" << "\n";
+        std::cout << "-----  WINNER   -----" << "\n";
+        std::cout << "-----   DRAW!   ---- " << "\n";
+        std::cout << "  CONGRATULATIONS!!! " << "\n";
+        getchar();
+        exit(0);
     }
 
     system("cls"); // TODO CHANGE IT
@@ -603,7 +710,8 @@ void World::endGame()
     std::cout << "-----  WINNER   -----" << "\n";
     std::cout << "----- PLAYER " << winner->getSymbol() << "!! ----" << "\n";
     std::cout << "  CONGRATULATIONS!!! " << "\n";
-    std::cin.get();
+    getchar();
+    exit(0);
 }
 
 
@@ -640,6 +748,7 @@ void World::displayInstanceInfo(Instance *instance)
     {
         std::cout << "\n---------------------\n";
         std::cout << "Base turn" << " at position: (" << base->getPosX() << ", " << base->getPosY() << ")\n";
+        std::cout << "Hit points: " << base->getHitPoints() << "\n";
         std::cout << "Gold: " << base->getGold() << "\n";
         std::cout << "Number of Units: " << base->getNumberOfUnits() << "\n";
 
@@ -656,6 +765,8 @@ void World::displayInstanceInfo(Instance *instance)
     {
         std::cout << "\n---------------------\n";
         std::cout << "Character turn: " << character->getName() << " at position: (" << character->getPosX() << ", " << character->getPosY() << ")\n";
+        std::cout << "\n---------------------\n";
+
         std::cout << "Hit points: " << character->getHitPoints() << "\n";
         std::cout << "Attack range: " << character->getAttackRange() << "\n";
     }
@@ -728,11 +839,11 @@ void World::displayMap()
  */
 char World::displayMenu()
 {
-    char option;
+    char choose;
 
     do
     {
-//        system("clear"); // TODO CHANGE TO WORK ON LINUX
+//        system("cls"); // TODO CHANGE TO WORK ON LINUX
          system("cls");
 
         std::cout << "----- MAIN MENU -----" << "\n";
@@ -743,19 +854,23 @@ char World::displayMenu()
 
         std::cout << "\nChoose option: ";
 
-        option = getch();
-        option = toupper(option);
+        choose = getchar();
+        if (isalpha(choose))
+        {
+            choose = toupper(choose);
+        }
+        while (getchar() != '\n') {}
 
-        if (option != 'N' && option != 'L' && option != 'Q' && option != 'I')
+        if (choose != 'N' && choose != 'L' && choose != 'Q' && choose != 'I')
         {
             system("cls");
             std::cout << "\nInvalid option. Please try again.";
-            Sleep(1000);
+            std::this_thread::sleep_for(std::chrono::seconds(1)); // using thread lib for availability in windows and linux
         }
 
-    } while (option != 'N' && option != 'L' && option != 'Q' && option != 'I');
+    } while (choose != 'N' && choose != 'L' && choose != 'Q' && choose != 'I');
 
-    return option;
+    return choose;
 }
 
 
@@ -769,13 +884,12 @@ void World::displayGameInfo()
     std::cout << "------ WAR GAME! ------" << "\n";
     std::cout << "-----------------------" << "\n\n";
     std::cout << "----- DESCRIPTION -----" << "\n";
-    std::cout << "This game was created for interview. I was very excited during writing all this code. Thanks you for the ";
-    std::cout << "opportunity to participate in recruitment process and I am sorry that I did not manage to finish the whole game ";
-    std::cout << "but i will do it for myself. Unfortunately I did not have enough time to create this game with GUI too.";
+    std::cout << "-- INSTANCES WAR GAME -" << "\n";
     std::cout << "\n\n";
     std::cout << "------- AUTHOR --------" << "\n";
     std::cout << "    MICHAL DUDZIAK     " << "\n\n\n";
 
     std::cout << "Press enter to exit info: ";
-    std::cin.get();
+    getchar();
+    while (getchar() != '\n') {}
 }

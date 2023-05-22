@@ -6,12 +6,11 @@ class Worker :public Character
 {
 public:
 
-    Worker(World* world, int posX, int posY); // creating factory new object
+    Worker(World* world, int posX, int posY, char baseSymbol);
 
-    Worker(World* world, int hitPoints, int posX, int posY, int buildingCounter); // creating Knight probably read from file
+    Worker(World* world, int hitPoints, int posX, int posY, int buildingCounter, char baseSymbol);
 
-    void action() override;
-
+    int getAttackValue(const std::string& unitName) const override;
 };
 
 

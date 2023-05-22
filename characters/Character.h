@@ -10,15 +10,16 @@ protected:
 public:
     Character(World* world, int hitPoints, int speed, int cost, int attackRange, int buildingTime, int posX, int posY);
 
+    int getAttackValue(const std::string& unitName) const override;
+
     void action() override;
 
     void move() override;
 
-    int getAttackRange();
-
     int getBuildingTime();
 
     bool getNewUnitStatus();
+
 };
 
 #endif

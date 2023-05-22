@@ -9,6 +9,7 @@ Base::Base(World* world, int posX, int posY, char symbol)
     this->name = "Base";
     this->numberOfUnits = 0;
     this->characterInBase = nullptr;
+    this->baseSymbol = symbol; // may be redutant but necessary for correct object detection in characters action!
 }
 
 void Base::action()
@@ -22,29 +23,36 @@ void Base::action()
         world->displayInstanceInfo(this);
 
 
-        std::cout << "[1] Skip the turn" << "\n";
+        std::cout << "[Q] Skip the turn" << "\n";
 
         if (!this->getStatusInProgress() && this->getCharacterInBase() == nullptr)
         {
-            std::cout << "[2] Create new character" << "\n";
+            std::cout << "[1] Create new character" << "\n";
         }
 
         if (!this->getStatusInProgress() && this->getCharacterInBase() != nullptr)
         {
-            std::cout << "[3] Move your character from base" << "\n";
+            std::cout << "[2] Move your character from base" << "\n";
         }
 
         std::cout << "What do you want to do? ";
-        choose = getch();
+        choose = getchar();
+        if (isalpha(choose))
+        {
+            choose = toupper(choose);
+        }
+        while (getchar() != '\n') {}
         std::cout << "\n\n";
+
+
 
         switch (choose)
         {
-            case '1':
+            case 'Q':
             {
                 return;
             }
-            case '2':
+            case '1':
             {
                 if (!this->getStatusInProgress() && this->getCharacterInBase() == nullptr)
                 {
@@ -57,7 +65,7 @@ void Base::action()
                     break;
                 }
             }
-            case '3':
+            case '2':
             {
                 if (this->getCharacterInBase() != nullptr)
                 {

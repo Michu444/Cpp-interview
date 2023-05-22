@@ -7,6 +7,11 @@ Building::Building(World* world, int hitPoints, int speed, int cost, int attackR
     movePossible = false;
 }
 
+int Building::getAttackValue(const std::string &unitName) const
+{
+    return 0;
+}
+
 void Building::action()
 {}
 

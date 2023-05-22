@@ -5,17 +5,6 @@ Character::Character(World* world, int hitPoints, int speed, int cost, int attac
 :Instance(world, hitPoints, speed, cost, attackRange, buildingTime, posX, posY)
 {}
 
-/*
- * Support action for characters
- */
-void Character::action()
-{}
-
-int Character::getAttackRange()
-{
-    return this->attackRange;
-}
-
 int Character::getBuildingTime()
 {
     return this->buildingTime;
@@ -25,6 +14,65 @@ bool Character::getNewUnitStatus()
 {
     return this->newUnitStatus;
 }
+
+int Character::getAttackValue(const std::string &unitName) const
+{
+    return 0;
+}
+
+/*
+ * Support action for characters
+ */
+void Character::action()
+{
+    int choose;
+    Instance *chosenToAttack;
+
+    while(true)
+    {
+        world->displayMap();
+        std::cout << "\n---------------------\n";
+        std::cout << "Possible Attack (use all action points!) \n\n";
+
+        std::vector<Instance*> unitsAround =  world->displayInstancesAround(this);
+
+        //display units
+        int unitsCounter = 1;
+        for (Instance* unit : unitsAround)
+        {
+            std::cout << "[" << unitsCounter << "] " << unit->getName() << " at (" << unit->getPosX() << ", " << unit->getPosY() << ")\n";
+            unitsCounter++;
+        }
+
+        if (unitsCounter == 1)
+        {
+            std::cout << "There are no any characters to fight!" << "\n\n";
+        }
+
+        std::cout << "[" << unitsCounter << "] Skip round\n\n";
+
+        std::cout << "What you want to do? ";
+        choose = getchar();
+        int chooseInt = choose - '0';
+
+
+        if (chooseInt == unitsCounter)
+        {
+            return;
+        }
+        else if (chooseInt > 0 && chooseInt < unitsCounter)
+        {
+            chosenToAttack = unitsAround[chooseInt-1];
+            world->attackUnit(this, chosenToAttack);
+            return;
+        }
+        else
+        {
+            std::cout << "\nInvalid option! Please choose again.\n\n";
+        }
+    }
+}
+
 
 /*
  * Support move for characters
@@ -163,7 +211,7 @@ void Character::move()
             left = false;
         }
 
-        std::cout << "[Q] Skip move" << "\n";
+        std::cout << "[Q] Cancel move" << "\n";
 
         //checking if any position is possible
         if (!up && !right && !down && !left)
@@ -173,8 +221,12 @@ void Character::move()
         }
 
         std::cout << "Where you want to move? ";
-        choose = getch();
-        choose = toupper(choose);
+        choose = getchar();
+        if (isalpha(choose))
+        {
+            choose = toupper(choose);
+        }
+        while (getchar() != '\n') {}
 
        switch(choose)
        {

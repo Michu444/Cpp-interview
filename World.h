@@ -44,11 +44,17 @@ public:
 
     void createCharacterInBase(Base *base);
 
-    void removeInstanceFromGame(Instance *instance, int posX, int posY);
+    void removeInstanceFromGame(Instance *instance);
 
     void setBaseDuringCrafting(Base *base, Instance *character, bool status, long int goldToSub);
 
     void makeRound();
+
+    std::vector<Instance*> displayInstancesAround(Instance *instance);
+
+    void attackUnit(Instance *attacker, Instance* defender);
+
+    void displayUnitStats(Instance *instance);
 
     void setInstanceOnMap(Instance *instance, int posX, int posY);
 
@@ -69,8 +75,6 @@ public:
 
     int getMapSizeX();
     int getMapSizeY();
-
-    bool mapFieldEmpty(int posX, int posY);
 };
 
 

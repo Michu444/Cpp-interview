@@ -1,7 +1,6 @@
 #include "World.h"
 #include "utils/SettingsReader.h"
 #include <iostream>
-#include <conio.h>
 
 int main()
 {
@@ -59,6 +58,7 @@ int main()
     system("cls");
     std::cout << "---THANK YOU FOR GAME!---" << "\n";
     getchar();
+    while (getchar() != '\n') {} // clearing buffor - replaces getch() logic from windows lib in getchar() func
 
     return 0;
 }

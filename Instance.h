@@ -2,7 +2,7 @@
 #define INTERVIEW_INSTANCE_H
 #include <iostream>
 #include <string>
-#include <conio.h>
+#include <unordered_map>
 
 class World;
 
@@ -28,6 +28,8 @@ public:
 
     Instance(World *world, int hitPoints, int speed, int cost, int attackRange, int buildingTime, int posX, int posY);
 
+    virtual int getAttackValue(const std::string& unitName) const = 0;
+
     void setPosX(int posX);
     void setPosY(int posY);
 
@@ -42,6 +44,8 @@ public:
     int getPosY() const;
 
     int getHitPoints();
+
+    void setHitPoints(int hitPointsValue);
 
     std::string getName();
 
@@ -58,6 +62,8 @@ public:
     void setBaseSymbol(char symbol);
 
     int getSpeed() const;
+
+    int getAttackRange();
 
     virtual ~Instance();
 };

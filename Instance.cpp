@@ -22,6 +22,11 @@ int Instance::getHitPoints()
     return this->hitPoints;
 }
 
+void Instance::setHitPoints(int hitPointsValue)
+{
+    this->hitPoints = hitPointsValue;
+}
+
 int Instance::getBuildingCounter()
 {
     return this->buildingCounter;
@@ -68,9 +73,9 @@ char Instance::getBaseSymbol() const
     return this->baseSymbol;
 }
 
-void Instance::setBaseSymbol(char symbol)
+void Instance::setBaseSymbol(char settingSymbol)
 {
-    this->baseSymbol = symbol;
+    this->baseSymbol = settingSymbol;
 }
 
 int Instance::getSpeed() const
@@ -81,6 +86,11 @@ int Instance::getSpeed() const
 char Instance::getSymbol()
 {
     return this->symbol;
+}
+
+int Instance::getAttackRange()
+{
+    return this->attackRange;
 }
 
 
