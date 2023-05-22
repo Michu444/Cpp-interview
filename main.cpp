@@ -32,7 +32,7 @@ int main()
 
         } else if (option == 'Q')
         {
-            system("cls");
+            system("clear");
             std::cout << "GOOD BYE!";
             std::cin.get();
             exit(0);
@@ -55,7 +55,7 @@ int main()
 
     } while (!world->getGameStatus());
 
-    system("cls");
+    system("clear");
     std::cout << "---THANK YOU FOR GAME!---" << "\n";
     getchar();
     while (getchar() != '\n') {} // clearing buffor - replaces getch() logic from windows lib in getchar() func

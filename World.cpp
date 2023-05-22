@@ -84,7 +84,7 @@ World::~World()
  */
 void World::makeRound()
 {
-    system("cls");
+    system("clear");
 
 
     if (round >= 2000 || player_1->getHitPoints() <= 0 || player_2->getHitPoints() <= 0) // TODO maybe add var if gameEnd == true do this too..
@@ -704,7 +704,7 @@ void World::endGame()
         exit(0);
     }
 
-    system("cls"); // TODO CHANGE IT
+    system("clear"); // TODO CHANGE IT
 
     std::cout << "----- GAME END! -----" << "\n";
     std::cout << "-----  WINNER   -----" << "\n";
@@ -781,7 +781,7 @@ void World::displayInstanceInfo(Instance *instance)
  */
 void World::displayMap()
 {
-    system("cls");
+    system("clear");
 
     // display first index row
     for (int i = 0; i < mapSizeX; i++)
@@ -843,8 +843,8 @@ char World::displayMenu()
 
     do
     {
-//        system("cls"); // TODO CHANGE TO WORK ON LINUX
-         system("cls");
+//        system("clear"); // TODO CHANGE TO WORK ON LINUX
+         system("clear");
 
         std::cout << "----- MAIN MENU -----" << "\n";
         std::cout << " N - Create new game " << "\n";
@@ -863,7 +863,7 @@ char World::displayMenu()
 
         if (choose != 'N' && choose != 'L' && choose != 'Q' && choose != 'I')
         {
-            system("cls");
+            system("clear");
             std::cout << "\nInvalid option. Please try again.";
             std::this_thread::sleep_for(std::chrono::seconds(1)); // using thread lib for availability in windows and linux
         }
@@ -879,7 +879,7 @@ char World::displayMenu()
  */
 void World::displayGameInfo()
 {
-    system("cls");
+    system("clear");
 
     std::cout << "------ WAR GAME! ------" << "\n";
     std::cout << "-----------------------" << "\n\n";

@@ -36,9 +36,9 @@ Thank you for the opportunity to participate in the recruitment process for the 
 2. Download cmake --> *sudo apt-get install cmake*
 3. Download repository from github
 4. In terminal go to the main project folder
-5. Type --> *cmake CMakeLists.txt*
-6. If the project build files have been generated correctly, you can build the project by typing --> *make*
-7. Run ./interview
+5. Type --> *cmake -B build*
+6. If the project build files have been generated correctly, you can go to /build folder and type --> *make* to create executable file
+7. If the build is successfull you can run ./interview ( main program ) and enjoy game!
 
 <br/>
 <br/>

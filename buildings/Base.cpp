@@ -18,7 +18,7 @@ void Base::action()
     {
         int choose;
 
-        system("cls"); // TODO change on linux command
+        system("clear"); // TODO change on linux command
         world->displayMap();
         world->displayInstanceInfo(this);
 
