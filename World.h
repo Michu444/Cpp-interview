@@ -24,6 +24,7 @@ protected:
 
     void addTestUnits();
 public:
+
     World(int mapSizeX, int mapSizeY);
 
     ~World();
@@ -53,8 +54,6 @@ public:
     std::vector<Instance*> displayInstancesAround(Instance *instance);
 
     void attackUnit(Instance *attacker, Instance* defender);
-
-    void displayUnitStats(Instance *instance);
 
     void setInstanceOnMap(Instance *instance, int posX, int posY);
 

@@ -18,7 +18,7 @@ I hope that my current implementation of the game at least to a lesser extent qu
 I failed to implement:
 
 - Reading settings from files (map.txt, orders.txt and status.txt)
-- Most unit tests
+- Unit tests
 - Mediator program
 - The mechanism of collecting gold from the mine by workers
 - ID system for each character and building
@@ -30,16 +30,20 @@ Thank you for the opportunity to participate in the recruitment process for the 
 <br/>
 <br/>
 
-## Installation and Compilation process in Ubuntu OS
+## Installation and Compilation game process in Ubuntu OS
 
 0. You can use 'install.sh' script to install required programs and libs. If you install via script you can skip the next three steps.
 1. Download g++ --> *sudo apt-get install g++*.
 2. Download cmake --> *sudo apt-get install cmake*.
 3. Download libncurses5 --> *sudo apt-get install -y libncurses5-dev*.
-4. Download repository from github.
+4. Download repository from GitHub.
 5. Type --> *cmake -B build*.
 6. If the project build files have been generated correctly, you can go to /build folder and type --> *make* to create executable file
 7. If the build is successfull you can run ./interview ( main program ) and enjoy game!
+
+
+I implemented the skeleton of two unit tests, but I haven't connected them to the project yet due to lack of time.
+I wanted to use the *gtest* framework.
 
 <br/>
 <br/>

@@ -217,20 +217,6 @@ void World::attackUnit(Instance *attacker, Instance* defender)
     std::this_thread::sleep_for(std::chrono::seconds(3)); // using thread lib for availability in windows and linux
 }
 
-
-/*
- * Display information about given instance.
- *
- * @param instance: Instance whose information should be displayed.
- */
-void World::displayUnitStats(Instance *instance)
-{
-    std::cout << "Unit: " << instance->getName() << " (" << instance->getPosX() << ", " << instance->getPosY() << "\n";
-    std::cout << "Hit points: " << instance->getHitPoints() << "\n";
-
-}
-
-
 /*
  * Handle character instances in single round.
  *
@@ -732,7 +718,7 @@ void World::endGame()
 /*
  * Creating empty map at the beginning of the game.
  */
-void World::createMap() // remember to delete all map objects
+void World::createMap()
 {
 
     this->map = new Instance **[this->mapSizeX];
@@ -763,6 +749,7 @@ void World::displayInstanceInfo(Instance *instance)
     {
         std::cout << "\n---------------------\n";
         std::cout << "Base turn" << " at position: (" << base->getPosX() << ", " << base->getPosY() << ")\n";
+        std::cout << "Base ID: " << base->getBaseSymbol() << "\n";
         std::cout << "Hit points: " << base->getHitPoints() << "\n";
         std::cout << "Gold: " << base->getGold() << "\n";
         std::cout << "Number of Units: " << base->getNumberOfUnits() << "\n";
@@ -782,6 +769,7 @@ void World::displayInstanceInfo(Instance *instance)
         std::cout << "Character turn: " << character->getName() << " at position: (" << character->getPosX() << ", " << character->getPosY() << ")\n";
         std::cout << "\n---------------------\n";
 
+        std::cout << "Main base: " << character->getBaseSymbol() << "\n";
         std::cout << "Hit points: " << character->getHitPoints() << "\n";
         std::cout << "Attack range: " << character->getAttackRange() << "\n";
     }
@@ -790,7 +778,6 @@ void World::displayInstanceInfo(Instance *instance)
         return;
     }
 }
-
 
 /*
  * Displays a representation of the map object. Each cell contains object or empty field.
