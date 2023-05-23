@@ -14,6 +14,8 @@ You can of course create units in bases and attack enemy bases, or add them manu
 
 I also did not manage to implement the game mechanism with the computer, so you can also control the second player.
 
+Press ENTER 2-3 times if the game does not move to the next move or freezes after some information is displayed.
+
 <br/>
 
 
