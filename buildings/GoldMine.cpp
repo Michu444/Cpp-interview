@@ -7,8 +7,3 @@ GoldMine::GoldMine(World* world, int posX, int posY)
     this->symbol = '6';
     this->name = "Gold Mine";
 }
-
-char GoldMine::getSymbol()
-{
-    return this->symbol;
-}

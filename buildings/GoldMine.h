@@ -10,8 +10,6 @@ class GoldMine : public Building
 public:
     GoldMine(World* world, int posX, int posY);
 
-    char getSymbol() override;
-
 };
 
 #endif

@@ -19,6 +19,20 @@ void World::addTestUnits()
     knight->setMovePossible(true);
     player_1->setNumberOfUnits(1);
     numberOrganisms++;
+
+    // Obstacle instances
+    auto *obstacle1 = new Obstacle(this, 9, 7);
+    this->setInstanceOnMap(obstacle1, obstacle1->getPosX(), obstacle1->getPosY());
+
+    auto *obstacle2 = new Obstacle(this, 9, 8);
+    this->setInstanceOnMap(obstacle2, obstacle2->getPosX(), obstacle2->getPosY());
+
+    auto *obstacle3 = new Obstacle(this, 9, 9);
+    this->setInstanceOnMap(obstacle3, obstacle3->getPosX(), obstacle3->getPosY());
+
+    auto *obstacle4 = new Obstacle(this, 9, 10);
+    this->setInstanceOnMap(obstacle4, obstacle4->getPosX(), obstacle4->getPosY());
+
 //
 //
 //    auto *worker1 = new Worker(this, 5, 6, '2');
