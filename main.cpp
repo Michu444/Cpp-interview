@@ -2,35 +2,51 @@
 #include "utils/SettingsReader.h"
 #include <iostream>
 
+//void signalHandler(int signum) {
+//    endwin();
+//    exit(signum);
+//}
+
 int main()
 {
     char option;
     World *world = nullptr;
+    int mapSizeX, mapSizeY;
+
+//    initscr(); // initialize ncurses
+//    cbreak();  // buffor line off
+//    noecho();  // chars show off
+//
+//    signal(SIGINT, signalHandler); // signal handle: Ctrl+C
+//    signal(SIGTERM, signalHandler); // term signal handle
+
 
     // MAIN MENU LOOP
-    do // TODO CHANGE ON SWITCH WITH GETCH
+    do
     {
-//        option = World::displayMenu(); //TODO UNCOMMENT
-        option = 'N';
+        option = World::displayMenu();
 
         if (option == 'N')
         {
-            world = new World(12, 12);
+            std::cout << "Type size x and size y of the map: ";
+            std::cin >> mapSizeX >> mapSizeY;
 
-        } else if (option == 'L')
-        {
-            SettingsReader settingsReader;
+            world = new World(mapSizeX, mapSizeY);
 
-            world = new World(12,12); // TODO
-
-            char **map = settingsReader.readMap();
-
-            std::cout << map;
-
-            // TODO second constructor to prepare world with setted settings where settings are converted to correct data.
-            // World world(map, orders, status); <-- inside all should be converted to correct vaules.
-
-        } else if (option == 'Q')
+        }
+//        else if (option == 'L') // NOT IMPLEMENTED
+//        {
+//            SettingsReader settingsReader;
+//
+//            world = new World(12,12);
+//
+//            char **map = settingsReader.readMap();
+//
+//            std::cout << map;
+//
+//
+//        }
+        else if (option == 'Q')
         {
             system("clear");
             std::cout << "GOOD BYE!";
@@ -42,9 +58,8 @@ int main()
         } else
         {
             throw std::runtime_error("PROGRAM CRASHED! PLEASE RUN GAME AGAIN");
-            exit(1);
         }
-    } while (option != 'N' && option != 'L');
+    } while (option != 'N');
 
     world->displayMap();
 

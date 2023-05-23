@@ -12,6 +12,10 @@ Base::Base(World* world, int posX, int posY, char symbol)
     this->baseSymbol = symbol; // may be redutant but necessary for correct object detection in characters action!
 }
 
+
+/*
+ * Method handle base action
+ */
 void Base::action()
 {
     while (true)
@@ -79,7 +83,6 @@ void Base::action()
                             this->setCharacterInBase(nullptr);
                         }
                     }
-
                     return;
                 }
                 else

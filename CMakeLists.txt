@@ -3,7 +3,6 @@ project(interview)
 
 set(CMAKE_CXX_STANDARD 17)
 
-
 # path to /build folder
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 

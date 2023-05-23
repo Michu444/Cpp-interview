@@ -2,10 +2,9 @@
 
 
 
-// adding units on world and place it on map
+// Here we can add units
 void World::addTestUnits()
 {
-// TESTING UNITS
 
     player_1 = new Base(this, 0, 0, '1');
     this->setInstanceOnMap(player_1, 0, 0);
@@ -772,7 +771,7 @@ void World::displayInstanceInfo(Instance *instance)
     }
     else
     {
-        // TODO IDK WHAT TO DO
+        return;
     }
 }
 
