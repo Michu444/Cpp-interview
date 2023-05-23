@@ -11,6 +11,7 @@ Swordsman::Swordsman(World* world, int posX, int posY, char baseSymbol)
     this->newUnitStatus = true;
 }
 
+
 Swordsman::Swordsman(World* world, int hitPoints, int posX, int posY, int buildingCounter, char baseSymbol)
         :Character(world, hitPoints, 2, 250, 1, 3, posX, posY)
 {

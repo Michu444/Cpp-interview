@@ -22,7 +22,7 @@ void Base::action()
     {
         int choose;
 
-        system("clear"); // TODO change on linux command
+        system("clear");
         world->displayMap();
         world->displayInstanceInfo(this);
 

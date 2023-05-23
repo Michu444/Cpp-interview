@@ -11,6 +11,7 @@ Worker::Worker(World* world, int posX, int posY, char baseSymbol)
     this->newUnitStatus = true;
 }
 
+
 Worker::Worker(World* world, int hitPoints, int posX, int posY, int buildingCounter, char baseSymbol)
         :Character(world, hitPoints, 2, 100, 1, 2, posX, posY)
 {

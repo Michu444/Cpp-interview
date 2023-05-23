@@ -12,6 +12,7 @@ Archer::Archer(World* world, int posX, int posY, char baseSymbol)
     this->newUnitStatus = true;
 }
 
+
 Archer::Archer(World* world, int hitPoints, int posX, int posY, int buildingCounter, char baseSymbol)
         :Character(world, hitPoints, 2, 250, 5, 3, posX, posY)
 {
@@ -23,6 +24,7 @@ Archer::Archer(World* world, int hitPoints, int posX, int posY, int buildingCoun
     this->newUnitStatus = false;
 
 }
+
 
 // initialize get attack Values func
 int Archer::getAttackValue(const std::string &unitName) const

@@ -30,6 +30,6 @@
 #include <vector>
 #include <cctype>
 //#include <ncurses.h>
-#include <signal.h>
+//#include <signal.h>
 
 #endif

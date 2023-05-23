@@ -1,6 +1,5 @@
 #include "Pikeman.h"
 
-
 Pikeman::Pikeman(World* world, int posX, int posY, char baseSymbol)
         :Character(world, 50, 2, 200, 2, 3, posX, posY)
 {
@@ -11,6 +10,7 @@ Pikeman::Pikeman(World* world, int posX, int posY, char baseSymbol)
     this->baseSymbol = baseSymbol;
     this->newUnitStatus = true;
 }
+
 
 Pikeman::Pikeman(World* world, int hitPoints, int posX, int posY, int buildingCounter, char baseSymbol)
         :Character(world, hitPoints, 2, 200, 2, 3, posX, posY)

@@ -11,6 +11,7 @@ Knight::Knight(World* world, int posX, int posY, char baseSymbol)
     this->newUnitStatus = true;
 }
 
+
 Knight::Knight(World* world, int hitPoints, int posX, int posY, int buildingCounter, char baseSymbol)
         :Character(world, hitPoints, 5, 400, 1, 5, posX, posY)
 {

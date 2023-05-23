@@ -1,5 +1,8 @@
 #include "SettingsReader.h"
 
+// CLASS IS NOT FULLY IMPLEMENTED
+
+
 SettingsReader::SettingsReader()
 {
     pathToMap = "../settings/map.txt";
@@ -49,5 +52,3 @@ char** SettingsReader::readMap()
 
     return map;
 }
-
-// TODO prepare function to read char map to Instance map.

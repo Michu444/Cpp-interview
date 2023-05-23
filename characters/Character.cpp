@@ -163,7 +163,7 @@ void Character::move()
         world->displayMap();
 
         // print info after unavailable choose
-        if (choose == 'W' || choose == 'S' || choose == 'A' || choose == 'D' || choose == 'Q') // TODO CHECK IF WORKING
+        if (choose == 'W' || choose == 'S' || choose == 'A' || choose == 'D' || choose == 'Q')
         {
             std::cout << "\nYou cant move here! Try again!\n\n";
         }

@@ -2,24 +2,13 @@
 #include "utils/SettingsReader.h"
 #include <iostream>
 
-//void signalHandler(int signum) {
-//    endwin();
-//    exit(signum);
-//}
-
+/*
+ * Main func of game.
+ */
 int main()
 {
     char option;
     World *world = nullptr;
-    int mapSizeX, mapSizeY;
-
-//    initscr(); // initialize ncurses
-//    cbreak();  // buffor line off
-//    noecho();  // chars show off
-//
-//    signal(SIGINT, signalHandler); // signal handle: Ctrl+C
-//    signal(SIGTERM, signalHandler); // term signal handle
-
 
     // MAIN MENU LOOP
     do
@@ -28,10 +17,8 @@ int main()
 
         if (option == 'N')
         {
-            std::cout << "Type size x and size y of the map: ";
-            std::cin >> mapSizeX >> mapSizeY;
-
-            world = new World(mapSizeX, mapSizeY);
+            // init map size manually
+            world = new World(12 , 12);
 
         }
 //        else if (option == 'L') // NOT IMPLEMENTED

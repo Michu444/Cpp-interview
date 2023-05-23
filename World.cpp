@@ -2,7 +2,9 @@
 
 
 
-// Here we can add units
+/*
+ * Method to add units manually for testing actions
+ */
 void World::addTestUnits()
 {
 
@@ -12,11 +14,11 @@ void World::addTestUnits()
     player_2 = new Base(this, 11, 11, '2');
     this->setInstanceOnMap(player_2, 11, 11);
 
-//    auto *knight = new Knight(this, 5, 5, '1');
-//    this->setInstanceOnMap(knight, knight->getPosX(), knight->getPosY());
-//    knight->setMovePossible(true);
-//    player_1->setNumberOfUnits(1);
-//    numberOrganisms++;
+    auto *knight = new Knight(this, 5, 5, '1');
+    this->setInstanceOnMap(knight, knight->getPosX(), knight->getPosY());
+    knight->setMovePossible(true);
+    player_1->setNumberOfUnits(1);
+    numberOrganisms++;
 //
 //
 //    auto *worker1 = new Worker(this, 5, 6, '2');
@@ -31,8 +33,8 @@ void World::addTestUnits()
 //    catapult->setMovePossible(true);
 //    player_1->setNumberOfUnits(1);
 //    numberOrganisms++;
-
 }
+
 
 /*
  * Basic constructor to create game world.
@@ -61,6 +63,7 @@ World::World(int mapSizeX, int mapSizeY)
 
 }
 
+
 /*
  * Destructor where map object is also deleting.
  */
@@ -86,7 +89,7 @@ void World::makeRound()
     system("clear");
 
 
-    if (round >= 2000 || player_1->getHitPoints() <= 0 || player_2->getHitPoints() <= 0) // TODO maybe add var if gameEnd == true do this too..
+    if (round >= 2000 || player_1->getHitPoints() <= 0 || player_2->getHitPoints() <= 0)
     {
         this->endGame();
         gameEnd = true;
@@ -129,7 +132,6 @@ void World::makeRound()
             }
         }
     }
-
     this->makeAllCharactersMovePossibility();
     this->displayMap();
     std::cout << "\nEND OF THE " << this->getRound() << " ROUND! PRESS ENTER TO GO TO NEXT ROUND!";
@@ -137,6 +139,7 @@ void World::makeRound()
     while (getchar() != '\n') {}
     this->increaseRound();
 }
+
 
 /*
  * Searches for instances around that can be attacked by instance which is turn.
@@ -215,12 +218,18 @@ void World::attackUnit(Instance *attacker, Instance* defender)
 }
 
 
+/*
+ * Display information about given instance.
+ *
+ * @param instance: Instance whose information should be displayed.
+ */
 void World::displayUnitStats(Instance *instance)
 {
     std::cout << "Unit: " << instance->getName() << " (" << instance->getPosX() << ", " << instance->getPosY() << "\n";
     std::cout << "Hit points: " << instance->getHitPoints() << "\n";
 
 }
+
 
 /*
  * Handle character instances in single round.
@@ -301,7 +310,6 @@ void World::handleBuilding(Building *building)
                 base->setNumberOfUnits(base->getNumberOfUnits() + 1);
                 base->setStatusInProgress(false);
                 base->getCharacterInBase()->setMovePossible(true); // after creating, character can move
-                // TODO ADD UNIT ON MAP - THINK ABOUT HOW TO ADD IT ON BASE FIELD
             }
         }
     }
@@ -625,6 +633,10 @@ bool World::checkMapField(Instance *instance, int posX, int posY)
     return false;
 }
 
+
+/*
+ * Makes possibility to move of all instances located on map.
+ */
 void World::makeAllCharactersMovePossibility()
 {
     for (int y = 0; y < this->mapSizeX; ++y)
@@ -657,15 +669,18 @@ void World::increaseRound()
     this->round++;
 }
 
+
 int World::getMapSizeX()
 {
     return this->mapSizeX;
 }
 
+
 int World::getMapSizeY()
 {
     return this->mapSizeY;
 }
+
 
 /*
  * Summarize game and make operations during ending game.
@@ -703,7 +718,7 @@ void World::endGame()
         exit(0);
     }
 
-    system("clear"); // TODO CHANGE IT
+    system("clear");
 
     std::cout << "----- GAME END! -----" << "\n";
     std::cout << "-----  WINNER   -----" << "\n";
@@ -735,6 +750,7 @@ void World::createMap() // remember to delete all map objects
         }
     }
 }
+
 
 /*
  * Displaying info about Instance that is moving and lists possible options to choose from.
@@ -774,6 +790,7 @@ void World::displayInstanceInfo(Instance *instance)
         return;
     }
 }
+
 
 /*
  * Displays a representation of the map object. Each cell contains object or empty field.
@@ -842,12 +859,11 @@ char World::displayMenu()
 
     do
     {
-//        system("clear"); // TODO CHANGE TO WORK ON LINUX
          system("clear");
 
         std::cout << "----- MAIN MENU -----" << "\n";
         std::cout << " N - Create new game " << "\n";
-        std::cout << " L - Load game       " << "\n";
+//        std::cout << " L - Load game       " << "\n";
         std::cout << " I - Game info       " << "\n";
         std::cout << " Q - Quit game       " << "\n";
 
@@ -860,14 +876,14 @@ char World::displayMenu()
         }
         while (getchar() != '\n') {}
 
-        if (choose != 'N' && choose != 'L' && choose != 'Q' && choose != 'I')
+        if (choose != 'N' && choose != 'Q' && choose != 'I')
         {
             system("clear");
             std::cout << "\nInvalid option. Please try again.";
             std::this_thread::sleep_for(std::chrono::seconds(1)); // using thread lib for availability in windows and linux
         }
 
-    } while (choose != 'N' && choose != 'L' && choose != 'Q' && choose != 'I');
+    } while (choose != 'N' && choose != 'Q' && choose != 'I');
 
     return choose;
 }

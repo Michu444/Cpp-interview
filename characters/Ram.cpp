@@ -11,6 +11,7 @@ Ram::Ram(World* world, int posX, int posY, char baseSymbol)
     this->newUnitStatus = true;
 }
 
+
 Ram::Ram(World* world, int hitPoints, int posX, int posY, int buildingCounter, char baseSymbol)
         :Character(world, hitPoints, 2, 500, 1, 4, posX, posY)
 {
